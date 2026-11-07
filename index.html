@@ -12,7 +12,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Be+Vietnam+Pro:wght@300;400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=6">
+  <link rel="stylesheet" href="style.css?v=7">
 </head>
 <body class="locked">
 
@@ -78,6 +78,12 @@
           <linearGradient id="dressGrad" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#f3e4cc"/>
           </linearGradient>
+          <linearGradient id="suitBlack" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#3a3a46"/><stop offset=".55" stop-color="#16161c"/><stop offset="1" stop-color="#050507"/>
+          </linearGradient>
+          <linearGradient id="suitBack" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#1c1c24"/><stop offset="1" stop-color="#050507"/>
+          </linearGradient>
           <radialGradient id="blush"><stop offset="0" stop-color="#ff7a93" stop-opacity=".8"/><stop offset="1" stop-color="#ff7a93" stop-opacity="0"/></radialGradient>
         </defs>
 
@@ -95,13 +101,15 @@
 
         <!-- ===== CHÚ RỂ ===== -->
         <g class="groom"><g class="walker"><g class="lean">
-          <g class="g-leg back"><path d="M-18 -64H-4L-6 -4H-19Z" fill="url(#suitDark)"/><ellipse cx="-12" cy="-2" rx="11" ry="4.5" fill="#2a0610"/></g>
-          <g class="g-leg front"><path d="M4 -64H18L20 -4H7Z" fill="url(#silGold)"/><ellipse cx="16" cy="-2" rx="11" ry="4.5" fill="#2a0610"/></g>
-          <path d="M-16 -146Q0 -138 16 -146L32 -132Q38 -100 34 -60L-34 -60Q-38 -100 -32 -132Z" fill="url(#silGold)"/>
-          <path d="M-7 -146L0 -120L7 -146Z" fill="#fff"/>
-          <path d="M-7 -137l7 4 7-4-7-3z" fill="#7a1c30"/>
-          <circle cx="-14" cy="-122" r="4" fill="#e04a66"/>
-          <g class="g-arm"><path d="M24 -134Q38 -130 38 -112L40 -74H30L28 -110Z" fill="url(#suitDark)"/><circle cx="35" cy="-70" r="6" fill="#f6d8b8"/></g>
+          <g class="g-leg back"><path d="M-18 -64H-4L-6 -4H-19Z" fill="url(#suitBack)"/><ellipse cx="-12" cy="-2" rx="11" ry="4.5" fill="#050507"/></g>
+          <g class="g-leg front"><path d="M4 -64H18L20 -4H7Z" fill="url(#suitBlack)" stroke="rgba(247,227,168,.35)" stroke-width="1"/><ellipse cx="16" cy="-2" rx="11" ry="4.5" fill="#050507"/></g>
+          <path d="M-16 -146Q0 -138 16 -146L32 -132Q38 -100 34 -60L-34 -60Q-38 -100 -32 -132Z" fill="url(#suitBlack)" stroke="rgba(247,227,168,.45)" stroke-width="1.2"/>
+          <path d="M-8 -146L0 -112L8 -146Z" fill="#fff"/>
+          <path d="M-8 -146L-14 -128L0 -112Z M8 -146L14 -128L0 -112Z" fill="#2c2c36"/>
+          <path d="M-8 -138l8 4.5 8-4.5-8-3.5z" fill="#0b0b0f"/><circle cx="0" cy="-136" r="1.6" fill="#0b0b0f"/>
+          <circle cx="0" cy="-104" r="1.6" fill="#55555f"/><circle cx="0" cy="-92" r="1.6" fill="#55555f"/>
+          <circle cx="-17" cy="-124" r="4.5" fill="#e04a66"/><circle cx="-17" cy="-124" r="2" fill="#ff8fa3"/>
+          <g class="g-arm"><path d="M24 -134Q38 -130 38 -112L40 -74H30L28 -110Z" fill="url(#suitBlack)" stroke="rgba(247,227,168,.35)" stroke-width="1"/><rect x="29.5" y="-77" width="11" height="4" fill="#fff"/><circle cx="35" cy="-69" r="6" fill="#f6d8b8"/></g>
           <g class="g-head">
             <rect x="-7" y="-158" width="14" height="14" fill="#f6d8b8"/>
             <circle cx="2" cy="-176" r="22" fill="#f6d8b8"/>
@@ -297,7 +305,7 @@
 
   <div id="toast" class="toast"></div>
 
-  <script src="config.js?v=6"></script>
-  <script src="script.js?v=6"></script>
+  <script src="config.js?v=7"></script>
+  <script src="script.js?v=7"></script>
 </body>
 </html>
