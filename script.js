@@ -339,7 +339,7 @@
       const tl = t < 7.6 ? t : (t < 11.6 ? 7.6 : t - 4);   // đoạn kết lùi 4s sau phần cúi chào hai họ
       // --- đi vào: giảm tốc dần, bước chân tính theo quãng đường nên không trượt chân ---
       const pw = seg(t, .9, 2.7), walkD = 170 * outQuad(pw);
-      const pa = seg(t, 3.9, 4.4), appD = 36 * inOut(pa);
+      const pa = seg(t, 3.9, 4.4), appD = 23 * inOut(pa);
       const amp = (pw > 0 && pw < 1 ? Math.pow(1 - pw, .7) : 0) + .45 * bump(pa);
       const phase = (walkD + appD) / 44 * Math.PI * 2;
       const tw = seg(t, 5.3, 6.2), twE = inOut(tw);           // xoay vòng
@@ -384,7 +384,7 @@
       const surprise = -40 * bump(seg(t, 3.1, 3.9));
       const windup = 35 * bump(seg(t, 6.15, 6.45));
       const toss = -165 * (outBack(seg(t, 6.45, 6.75)) - inOut(seg(t, 7.0, 7.5)));
-      set(B.arm, `rotate(${surprise + windup + toss - 140 * wave - 22 * waveSw} 4.8 -125)`);
+      set(B.arm, `rotate(${surprise + windup + toss - 140 * wave - 22 * waveSw} 1.6 -125)`);
       // tung bó hoa: tách khỏi tay, bay vút lên xoay tròn
       once('release', t, 6.65, () => {
         const [x, y] = screenOf(B.bouquet); flyFrom = toSvg(x, y);
@@ -392,7 +392,7 @@
       });
       if (flyFrom) {
         const p = seg(t, 6.65, 7.6);
-        set(fly, `translate(${flyFrom.x + 70 * p} ${flyFrom.y - 360 * outCubic(p)}) rotate(${600 * p}) scale(${1.1 + .3 * p}) translate(4.8 80)`);
+        set(fly, `translate(${flyFrom.x + 70 * p} ${flyFrom.y - 360 * outCubic(p)}) rotate(${600 * p}) scale(${1.1 + .3 * p}) translate(19.2 86.4)`);
         fly.style.opacity = 1 - seg(t, 7.35, 7.6);
       }
       once('catch', t, 7.45, () => { const [x, y] = screenOf(fly); burstAt(x, y, 40, pals[0], .7); });
