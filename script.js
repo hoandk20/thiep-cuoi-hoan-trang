@@ -365,9 +365,9 @@
       const shake = (t > 2.95 && t < 3.3) ? 2.2 * Math.sin(t * 70) : 0;   // run tay hồi hộp
       const waveSw = Math.sin((tl - 7.6) * 11) * wave;
       const armA = -12 * amp * Math.sin(phase) - 75 * offer - 45 * hug * (1 - sep) - 105 * bump(tw) + shake - 100 * wave + 16 * waveSw;
-      set(G.arm, `rotate(${armA} 31 -130)`);
+      set(G.arm, `rotate(${armA} 7 -136)`);
       // tay sau chú rể: đánh ngược tay trước khi đi, giơ lên vẫy cùng lúc chào khách
-      set(G.arm2, `rotate(${14 * amp * Math.sin(phase) + 150 * wave - 18 * waveSw} -8 -132)`);
+      set(G.arm2, `rotate(${14 * amp * Math.sin(phase) + 150 * wave - 18 * waveSw} 2 -136)`);
       // tay trước cô dâu: đánh khi đi → che miệng bất ngờ khi thấy nhẫn → đặt lên vai chú rể khi hôn → vẫy chào
       const b2 = -10 * amp * Math.sin(phase) + 150 * bump(seg(t, 3.15, 3.95)) + 100 * (inOut(seg(t, 4.15, 4.45)) - inOut(seg(t, 5.1, 5.3))) + 120 * wave + 20 * waveSw;
       set(B.arm2, `rotate(${b2} -8 -133)`);
