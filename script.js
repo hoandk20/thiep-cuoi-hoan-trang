@@ -216,9 +216,9 @@
       eyeO: q('.b-head .eye-open'), eyeC: q('.b-head .eye-closed'), eyeH: q('.b-head .eye-heart'), blush: q('.b-head .blush') };
     const doves = q('.doves'), wings = [...svg.querySelectorAll('.doves .wing')];
     const cupid = q('.cupid'), cWing = q('.cupid .c-wing'), arrow = q('.arrow'), sweat = q('.g-head .sweat');
-    const relsL = q('.rels.left'), relsR = q('.rels.right');
-    const people = [...svg.querySelectorAll('.rel')].map((el, i) => ({ side: el.closest('.rels').classList.contains('left') ? 0 : 1, i,
-      bob: el.querySelector('.rel-bob'), h1: el.querySelector('.h1'), h2: el.querySelector('.h2') }));
+    const crowd = q('.audience');
+    const people = [...svg.querySelectorAll('.aud')].map((el, i, all) => ({ side: i < all.length / 2 ? 0 : 1, i,
+      bob: el.querySelector('.aud-bob'), arms: el.querySelector('.aud-arms'), h1: el.querySelector('.h1'), h2: el.querySelector('.h2') }));
     const cd3 = $('#cd3'), flash = $('#flash'), pol = $('#polaroid');
     $('#polaroidImg').src = url(W.couplePhoto);
     const fly = B.bouquet.cloneNode(true); fly.style.opacity = 0; svg.appendChild(fly);
@@ -353,25 +353,29 @@
       }
       once('snap', tl, 9.0, () => burstAt(innerWidth / 2, innerHeight / 2, 70, pals[2], 1.1));
       once('land', tl, 9.9, () => burstAt(innerWidth / 2, innerHeight / 2 + 40, 40, pals[1], .8));
-      // họ hàng: bước vào sau nụ hôn, vỗ tay; rộn ràng khi được cúi chào; cùng nhảy tung pháo giấy
+      // khán giả (họ hàng hai bên) phía dưới: xuất hiện sau nụ hôn, giơ tay vỗ khi được cúi chào, cùng nhảy tung pháo giấy
       const enter = outCubic(seg(t, 4.6, 5.4));
-      op_(relsL, enter); op_(relsR, enter);
-      set(relsL, `translate(${-150 * (1 - enter)} 0)`); set(relsR, `translate(${150 * (1 - enter)} 0)`);
+      op_(crowd, enter); set(crowd, `translate(0 ${70 * (1 - enter)})`);
       const party = inOut(seg(t, 10.3, 10.6)) - inOut(seg(t, 11.5, 11.9));
-      const hype = [Math.max(.35, bump(seg(t, 7.9, 9.0)), party), Math.max(.35, bump(seg(t, 9.2, 10.3)), party)];
+      const kissCheer = bump(seg(t, 4.9, 6.3));
+      const hype = [Math.max(.25, kissCheer, bump(seg(t, 7.9, 9.0)), .55 * bump(seg(t, 9.2, 10.3)), party),
+                    Math.max(.25, kissCheer, .55 * bump(seg(t, 7.9, 9.0)), bump(seg(t, 9.2, 10.3)), party)];
       people.forEach(P => {
         const I = t > 4.6 ? hype[P.side] : 0;
-        const d = 1.5 + 1.5 * Math.sin(t * 24 + P.i * 1.7) * I;          // hai tay vỗ vào nhau
+        const raise = clamp((I - .3) / .4);                                   // giơ tay lên quá đầu
+        set(P.arms, `translate(0 ${34 * (1 - raise)})`); op_(P.arms, raise);
+        const d = 2.5 + 2.5 * Math.sin(t * 22 + P.i * 1.7) * raise;           // hai tay vỗ vào nhau
         set(P.h1, `translate(${d} 0)`); set(P.h2, `translate(${-d} 0)`);
-        const hop = 9 * clamp((I - .45) / .55) * Math.abs(Math.sin(t * 8 + P.i * 1.3));
-        set(P.bob, `translate(0 ${-hop})`);
+        const hop = 2 * Math.abs(Math.sin(t * 3 + P.i)) + 9 * clamp((I - .5) / .5) * Math.abs(Math.sin(t * 8 + P.i * 1.3));
+        set(P.bob, `translate(0 ${-hop}) rotate(${2.5 * Math.sin(t * 4 + P.i)} 0 92)`);
       });
-      const relAt = (el) => { const r = el.getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height * .3]; };
-      once('cheerL', t, 8.35, () => { const [x, y] = relAt(relsL); burstAt(x, y, 30, pals[1], .55); });
-      once('cheerR', t, 9.65, () => { const [x, y] = relAt(relsR); burstAt(x, y, 30, pals[3], .55); });
+      const crowdAt = (fx) => { const r = crowd.getBoundingClientRect(); return [r.left + r.width * fx, r.top + r.height * .25]; };
+      once('cheerK', t, 5.2, () => { const [x, y] = crowdAt(.5); burstAt(x, y, 30, pals[1], .6); });
+      once('cheerL', t, 8.35, () => { const [x, y] = crowdAt(.25); burstAt(x, y, 30, pals[1], .6); });
+      once('cheerR', t, 9.65, () => { const [x, y] = crowdAt(.75); burstAt(x, y, 30, pals[3], .6); });
       [10.45, 10.8, 11.15].forEach((at, k) => {
-        once('confL' + k, t, at, () => { const [x, y] = relAt(relsL); burstAt(x, y, 40, pals[(k + 2) % 4], .75); });
-        once('confR' + k, t, at + .15, () => { const [x, y] = relAt(relsR); burstAt(x, y, 40, pals[(k + 1) % 4], .75); });
+        once('confL' + k, t, at, () => { const [x, y] = crowdAt(.2 + .1 * k); burstAt(x, y, 40, pals[(k + 2) % 4], .8); });
+        once('confR' + k, t, at + .15, () => { const [x, y] = crowdAt(.8 - .1 * k); burstAt(x, y, 40, pals[(k + 1) % 4], .8); });
       });
       if (t < 17.5) requestAnimationFrame(frame);
     }
