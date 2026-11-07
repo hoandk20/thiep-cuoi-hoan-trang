@@ -364,7 +364,7 @@ a{color:inherit}
 .invite-run *{transform-box:fill-box}
 .invite-run .runner{animation:runX 9s linear infinite}
 .invite-run .r-bride{animation-delay:-8.15s}                 /* cô dâu chạy theo sau chú rể */
-.invite-run .r-bride .face,.invite-run .r-bride .bob,.invite-run .r-bride .foot,.invite-run .r-bride .toss{animation-delay:-8.15s}
+.invite-run .r-bride .face,.invite-run .r-bride .bob,.invite-run .r-bride .foot{animation-delay:-8.15s}
 @keyframes runX{0%{transform:translateX(70px)}46%{transform:translateX(570px)}50%{transform:translateX(570px)}96%{transform:translateX(70px)}100%{transform:translateX(70px)}}
 .invite-run .face{transform-origin:50% 100%;animation:faceTurn 9s linear infinite}
 @keyframes faceTurn{0%,45%{transform:scaleX(1)}50%,95%{transform:scaleX(-1)}100%{transform:scaleX(1)}}
@@ -378,10 +378,33 @@ a{color:inherit}
 @keyframes runFoot{from{transform:translate(-3px,0)}to{transform:translate(3px,-3px)}}
 .invite-run .veil-r{transform-origin:100% 0;animation:veilRun .6s ease-in-out infinite alternate}
 @keyframes veilRun{from{transform:skewX(4deg)}to{transform:skewX(-6deg) scaleX(1.08)}}
-.invite-run .toss{opacity:0;animation:toss 1.8s cubic-bezier(.2,.6,.4,1) infinite;animation-delay:var(--d)}
-.invite-run .r-bride .toss{animation-delay:calc(var(--d) - 8.15s)}
-@keyframes toss{0%{opacity:0;transform:translate(22px,-70px) rotate(0) scale(.6)}12%{opacity:1}
-  100%{opacity:0;transform:translate(calc(22px + var(--dx)),-170px) rotate(260deg) scale(1.15)}}
 .invite-run:not(.play) *{animation-play-state:paused!important}
 .invite-run .face,.invite-run .bob{transform-box:view-box;transform-origin:0 0}   /* lật/nghiêng quanh chân nhân vật */
-.invite-run .toss{transform-origin:50% 50%}
+
+/* khách mời nhận thiệp: chú rể đi qua → thiệp bay vào tay, nhảy lên, bong bóng chat; cô dâu đi qua → thả tim */
+.invite-run .g-card,.invite-run .g-heart,.invite-run .g-bubble{opacity:0}
+.invite-run .g-heart,.invite-run .g-bubble{transform-origin:50% 100%}
+.invite-run .g-card.g0{animation:gcard0 9s linear infinite}
+@keyframes gcard0{0%,10.6%{opacity:0;transform:translate(-30px,-22px) rotate(-40deg) scale(.6)}14.1%{opacity:1;transform:none}96%{opacity:1;transform:none}99%,100%{opacity:0;transform:none}}
+.invite-run .g-jump.g0{animation:gjump0 9s linear infinite}
+@keyframes gjump0{0%,13.6%,18.6%,20.1%,25.1%,100%{transform:translateY(0)}16.1%{transform:translateY(-11px)}22.6%{transform:translateY(-6px)}}
+.invite-run .g-bubble.g0{animation:gbub0 9s linear infinite}
+@keyframes gbub0{0%,13.6%{opacity:0;transform:scale(.4)}15.6%{opacity:1;transform:scale(1.08)}16.6%{transform:scale(1)}29.6%{opacity:1;transform:scale(1)}31.6%,100%{opacity:0;transform:scale(.8)}}
+.invite-run .g-heart.g0{animation:gheart0 9s linear infinite}
+@keyframes gheart0{0%,20.1%{opacity:0;transform:translateY(0) scale(.4)}22.1%{opacity:1;transform:translateY(-6px) scale(1.2)}32.1%,100%{opacity:0;transform:translateY(-34px) scale(1)}}
+.invite-run .g-card.g1{animation:gcard1 9s linear infinite}
+@keyframes gcard1{0%,23.5%{opacity:0;transform:translate(-30px,-22px) rotate(-40deg) scale(.6)}27.0%{opacity:1;transform:none}96%{opacity:1;transform:none}99%,100%{opacity:0;transform:none}}
+.invite-run .g-jump.g1{animation:gjump1 9s linear infinite}
+@keyframes gjump1{0%,26.5%,31.5%,33.0%,38.0%,100%{transform:translateY(0)}29.0%{transform:translateY(-11px)}35.5%{transform:translateY(-6px)}}
+.invite-run .g-bubble.g1{animation:gbub1 9s linear infinite}
+@keyframes gbub1{0%,26.5%{opacity:0;transform:scale(.4)}28.5%{opacity:1;transform:scale(1.08)}29.5%{transform:scale(1)}42.5%{opacity:1;transform:scale(1)}44.5%,100%{opacity:0;transform:scale(.8)}}
+.invite-run .g-heart.g1{animation:gheart1 9s linear infinite}
+@keyframes gheart1{0%,33.0%{opacity:0;transform:translateY(0) scale(.4)}35.0%{opacity:1;transform:translateY(-6px) scale(1.2)}45.0%,100%{opacity:0;transform:translateY(-34px) scale(1)}}
+.invite-run .g-card.g2{animation:gcard2 9s linear infinite}
+@keyframes gcard2{0%,36.4%{opacity:0;transform:translate(-30px,-22px) rotate(-40deg) scale(.6)}39.9%{opacity:1;transform:none}96%{opacity:1;transform:none}99%,100%{opacity:0;transform:none}}
+.invite-run .g-jump.g2{animation:gjump2 9s linear infinite}
+@keyframes gjump2{0%,39.4%,44.4%,45.8%,50.8%,100%{transform:translateY(0)}41.9%{transform:translateY(-11px)}48.3%{transform:translateY(-6px)}}
+.invite-run .g-bubble.g2{animation:gbub2 9s linear infinite}
+@keyframes gbub2{0%,39.4%{opacity:0;transform:scale(.4)}41.4%{opacity:1;transform:scale(1.08)}42.4%{transform:scale(1)}55.4%{opacity:1;transform:scale(1)}57.4%,100%{opacity:0;transform:scale(.8)}}
+.invite-run .g-heart.g2{animation:gheart2 9s linear infinite}
+@keyframes gheart2{0%,45.8%{opacity:0;transform:translateY(0) scale(.4)}47.8%{opacity:1;transform:translateY(-6px) scale(1.2)}57.8%,100%{opacity:0;transform:translateY(-34px) scale(1)}}
