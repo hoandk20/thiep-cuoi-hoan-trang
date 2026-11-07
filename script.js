@@ -156,9 +156,101 @@
   const io = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } }), { threshold: .12 });
   $$('.reveal').forEach(el => io.observe(el));
 
-  /* ---- Cảnh chạy phát thiệp: chỉ chạy khi đang nhìn thấy (tiết kiệm pin) ---- */
-  const runScene = $('.invite-run');
-  if (runScene) new IntersectionObserver(es => es.forEach(en => runScene.classList.toggle('play', en.isIntersecting))).observe(runScene);
+  /* ---- Cô dâu chú rể nắm tay đi phát thiệp (vòng 14s, chỉ chạy khi đang nhìn thấy) ----
+     đi tới từng khách → cúi đầu, cô dâu trao thiệp → khách nhận, nhảy, nói, thả tim
+     → cuối cùng quay ra cúi chào người xem, tấm thiệp lớn "Trân trọng kính mời Bạn & Gia đình" */
+  (function inviteWalk() {
+    const root = $('.invite-run'); if (!root) return;
+    const q = s => root.querySelector(s), qa = s => [...root.querySelectorAll(s)];
+    const scene = q('.ig-scene'), couple = q('.ig-couple'), fly = q('.ig-fly'), big = q('.ig-big');
+    const G = { walk: q('.ig-groom .walk'), fl: q('.ig-groom .foot.l'), fr: q('.ig-groom .foot.r'), arm: q('.ig-groom .arm-o'), head: q('.ig-groom .head') };
+    const B = { walk: q('.ig-bride .walk'), skirt: q('.ig-bride .skirt'), veil: q('.ig-bride .veil'), arm: q('.ig-bride .arm-o'), head: q('.ig-bride .head'),
+      card: q('.ig-bride .held-card'), bouquet: q('.ig-bride .bouquet') };
+    const guests = qa('.ig-guest').map(g => ({ x: +g.dataset.x, j: g.querySelector('.gj'), down: g.querySelector('.arms-down'), hold: g.querySelector('.arms-hold'),
+      heart: g.querySelector('.g-heart'), bub: g.querySelector('.g-bubble') }));
+    const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+    const seg = (t, a, b) => clamp((t - a) / (b - a));
+    const io = p => p < .5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
+    const outBack = p => { const c = 1.70158; return 1 + (c + 1) * Math.pow(p - 1, 3) + c * Math.pow(p - 1, 2); };
+    const bump = p => Math.sin(Math.PI * clamp(p));
+    const set = (el, v) => el && el.setAttribute('transform', v);
+    const op = (el, v) => el && el.setAttribute('opacity', v);
+    const L = 14;
+    // lộ trình: [bắt đầu, kết thúc, từ x, tới x]
+    const path = [[0, 1.4, -80, 62], [2.6, 3.5, 62, 192], [4.7, 5.6, 192, 322], [6.8, 8.0, 322, 545]];
+    const stops = [1.4, 3.5, 5.6];                     // lúc dừng trước khách 1, 2, 3
+    const xAt = t => { let x = -80, d = 0;
+      for (const [a, b, x0, x1] of path) { if (t >= b) { x = x1; d += Math.abs(x1 - x0); } else if (t > a) { const p = io(seg(t, a, b)); x = x0 + (x1 - x0) * p; d += Math.abs(x1 - x0) * p; break; } else break; }
+      return [x, d]; };
+    let raf = 0, start = 0;
+    function frame(now) {
+      const t = ((now - start) / 1000) % L;
+      const [cx, dist] = xAt(t), [cx2] = xAt(t + .05);
+      const moving = Math.abs(cx2 - cx) > .3;
+      const ph = dist / 26 * Math.PI;                 // nhịp bước theo quãng đường
+      const amp = moving ? 1 : 0;
+      const fade = 1 - seg(t, 12.7, 13.3) + seg(t, 13.6, 14);
+      scene.setAttribute('opacity', t < 0.2 ? seg(t, 0, .2) : fade);
+      set(couple, `translate(${cx} 0)`);
+      // bước đi: nhún, lắc nhẹ, nhấc chân xen kẽ; váy đung đưa
+      const bob = -2.5 * amp * Math.abs(Math.sin(ph)), tilt = 2.5 * amp * Math.sin(ph);
+      set(G.walk, `translate(0 ${bob}) rotate(${tilt} 0 0)`);
+      set(B.walk, `translate(0 ${bob}) rotate(${tilt} 0 0)`);
+      set(G.fl, `translate(0 ${-3 * amp * Math.max(0, Math.sin(ph))})`);
+      set(G.fr, `translate(0 ${-3 * amp * Math.max(0, -Math.sin(ph))})`);
+      set(B.skirt, `skewX(${3 * Math.sin(ph * (amp ? 1 : 0) + t * 2)})`);
+      set(B.veil, `skewX(${-3 - 3 * Math.sin(t * 2.4)})`);
+      // trao thiệp ở mỗi điểm dừng
+      let give = 0, bowHead = 0;
+      stops.forEach((s, i) => {
+        const g = guests[i];
+        give = Math.max(give, io(seg(t, s, s + .3)) - io(seg(t, s + .55, s + .85)));
+        bowHead = Math.max(bowHead, bump(seg(t, s + .05, s + .6)));
+        const fp = seg(t, s + .35, s + .8);
+        if (fp > 0 && fp < 1) {
+          const x0 = cx + 49, y0 = -60, x1 = g.x, y1 = -46;
+          op(fly, 1); set(fly, `translate(${x0 + (x1 - x0) * fp} ${y0 + (y1 - y0) * fp - 26 * bump(fp)}) rotate(${360 * fp})`);
+        }
+        const got = t >= s + .8 && t < 13.3;
+        op(g.hold, got ? 1 : 0); op(g.down, got ? 0 : 1);
+        const jump = 10 * bump(seg(t, s + .8, s + 1.15)) + 5 * bump(seg(t, s + 1.15, s + 1.4));
+        set(g.j, `translate(0 ${-jump - 1.2 * Math.abs(Math.sin(t * 2.2 + i))})`);
+        const bp = seg(t, s + .85, s + 1.05);
+        op(g.bub, t > s + .85 && t < s + 2.9 ? clamp(bp * 2) * (1 - seg(t, s + 2.6, s + 2.9)) : 0);
+        set(g.bub, `translate(0 -113) scale(${.5 + .5 * outBack(bp)}) translate(0 113)`);
+        const hp = seg(t, s + 1.0, s + 2.0);
+        op(g.heart, hp > 0 && hp < 1 ? 1 - hp : 0); set(g.heart, `translate(0 ${-24 * hp})`);
+        // cuối vòng: khách vẫy tay theo
+        if (t > 11.6 && t < 12.7) set(g.j, `translate(0 ${-4 * Math.abs(Math.sin(t * 8 + i))})`);
+      });
+      if (!stops.some(s => t > s + .35 && t < s + .8)) op(fly, 0);
+      // mời người xem: cúi chào, trao thiệp lớn
+      const bowV = bump(seg(t, 8.3, 9.0));
+      const giveV = io(seg(t, 8.9, 9.2)) - io(seg(t, 9.6, 10));
+      const wave = io(seg(t, 11.6, 11.9)) - io(seg(t, 12.5, 12.8));
+      const ws = Math.sin(t * 12) * wave;
+      set(B.arm, `rotate(${-70 * Math.max(give, giveV) - 140 * wave + 18 * ws} 12 -78)`);
+      set(G.arm, `rotate(${140 * wave + 18 * ws} -19 -72)`);
+      op(B.card, Math.max(give, giveV) > .2 ? 1 : 0); op(B.bouquet, Math.max(give, giveV) > .2 ? 0 : 1);
+      const hd = 5 * Math.max(bowHead * .7, bowV);
+      set(G.head, `translate(0 ${hd}) rotate(${-3 * bowV} 0 -90)`);
+      set(B.head, `translate(0 ${hd}) rotate(${3 * bowV} 0 -90)`);
+      // tấm thiệp lớn bay ra giữa
+      const bp = seg(t, 9.15, 9.75), bo = seg(t, 11.2, 11.6);
+      if (t > 9.15 && t < 11.6) {
+        const sc = .12 + .88 * outBack(bp) - .5 * io(bo);
+        const x = (cx + 49) + (320 - cx - 49) * io(bp), y = 144 + (102 - 144) * io(bp);
+        op(big, 1 - bo); set(big, `translate(${x} ${y}) scale(${Math.max(.01, sc)}) rotate(${(1 - io(bp)) * -20 + Math.sin(t * 2) * 1.2})`);
+      } else op(big, 0);
+      if (t > 9.75 && t < 9.8 && !root._b) { root._b = 1; const r = root.getBoundingClientRect(); window.__burst && window.__burst(r.left + r.width / 2, r.top + r.height * .45); }
+      if (t < 1) root._b = 0;
+      raf = requestAnimationFrame(frame);
+    }
+    new IntersectionObserver(es => es.forEach(en => {
+      if (en.isIntersecting && !raf) { start = performance.now(); raf = requestAnimationFrame(frame); }
+      else if (!en.isIntersecting && raf) { cancelAnimationFrame(raf); raf = 0; }
+    }), { threshold: .2 }).observe(root);
+  })();
 
   /* ---- Active nav ---- */
   const links = $$('.topnav a');
@@ -215,8 +307,8 @@
     const svg = $('.kiss-svg');
     const q = (s) => svg.querySelector(s);
     const G = { root: q('.groom'), walk: q('.groom .walker'), lean: q('.groom .lean'), legF: q('.g-leg.front'), legB: q('.g-leg.back'),
-      arm: q('.g-arm'), head: q('.g-head'), box: q('.ringbox'), lid: q('.ringbox .lid'), eyeO: q('.g-head .eye-open'), eyeC: q('.g-head .eye-closed'), blush: q('.g-head .blush') };
-    const B = { root: q('.bride'), walk: q('.bride .walker'), lean: q('.bride .lean'), arm: q('.b-arm'), bouquet: q('.b-arm .bouquet'), head: q('.b-head'), foot: q('.b-foot'),
+      arm: q('.g-arm'), arm2: q('.g-arm2'), head: q('.g-head'), box: q('.ringbox'), lid: q('.ringbox .lid'), eyeO: q('.g-head .eye-open'), eyeC: q('.g-head .eye-closed'), blush: q('.g-head .blush') };
+    const B = { root: q('.bride'), walk: q('.bride .walker'), lean: q('.bride .lean'), arm: q('.b-arm'), arm2: q('.b-arm2'), bouquet: q('.b-arm .bouquet'), head: q('.b-head'), foot: q('.b-foot'),
       eyeO: q('.b-head .eye-open'), eyeC: q('.b-head .eye-closed'), eyeH: q('.b-head .eye-heart'), blush: q('.b-head .blush') };
     const doves = q('.doves'), wings = [...svg.querySelectorAll('.doves .wing')];
     const cupid = q('.cupid'), cWing = q('.cupid .c-wing'), arrow = q('.arrow'), sweat = q('.g-head .sweat');
@@ -273,16 +365,21 @@
       const waveSw = Math.sin((tl - 7.6) * 11) * wave;
       const armA = -12 * amp * Math.sin(phase) - 75 * offer - 45 * hug * (1 - sep) - 105 * bump(tw) + shake - 100 * wave + 16 * waveSw;
       set(G.arm, `rotate(${armA} 31 -130)`);
+      // tay sau chú rể: đánh ngược tay trước khi đi, giơ lên vẫy cùng lúc chào khách
+      set(G.arm2, `rotate(${14 * amp * Math.sin(phase) + 150 * wave - 18 * waveSw} -8 -132)`);
+      // tay trước cô dâu: đánh khi đi → che miệng bất ngờ khi thấy nhẫn → đặt lên vai chú rể khi hôn → vẫy chào
+      const b2 = -10 * amp * Math.sin(phase) + 150 * bump(seg(t, 3.15, 3.95)) + 100 * (inOut(seg(t, 4.15, 4.45)) - inOut(seg(t, 5.1, 5.3))) + 120 * wave + 20 * waveSw;
+      set(B.arm2, `rotate(${b2} -8 -133)`);
       op_(G.box, clamp(seg(t, 2.85, 3.0) - seg(t, 3.75, 3.95)));
       set(G.box, `rotate(${-armA} 35 -69) translate(35 -69) scale(${1.6 * (.6 + .4 * outBack(seg(t, 2.85, 3.1)))}) translate(-35 69)`);
       set(G.lid, `rotate(${-110 * outBack(seg(t, 3.05, 3.35))} 27 -71)`);
-      set(G.head, `rotate(${6 * bump(seg(t, 2.6, 3.2)) + 14 * (bowL + bowR)} 0 -150)`);
       set(B.head, `rotate(${-9 * bump(seg(t, 3.2, 3.9)) - 14 * (bowL + bowR)} -2 -148)`);
       // nghiêng người hôn, tách nhẹ khi xoay, thở nhẹ
       const lean = inOut(seg(t, 4.0, 4.45)) * (1 - .8 * bump(tw)) * (1 - wave) * (1 - sep), breathe = t > 4.6 ? Math.sin((t - 4.6) * 2.4) * .7 : 0;
+      set(G.head, `rotate(${6 * bump(seg(t, 2.6, 3.2)) + 14 * (bowL + bowR) + 12 * lean} 0 -150)`);
       set(G.lean, `rotate(${4 * lean + breathe - 20 * bowL + 20 * bowR} 0 0) scale(${Math.cos(Math.PI * gTurn)} 1)`);
       const spin = Math.cos(2 * Math.PI * twE), flare = 1 + .18 * bump(tw);
-      set(B.lean, `translate(0 ${-4 * lean}) rotate(${-4 * lean - breathe - 20 * bowL + 20 * bowR} 0 0) scale(${spin * flare * Math.cos(Math.PI * bTurn)} 1)`);
+      set(B.lean, `translate(0 ${-9 * lean}) rotate(${-4 * lean - breathe - 20 * bowL + 20 * bowR} 0 0) scale(${spin * flare * Math.cos(Math.PI * bTurn)} 1)`);
       // tay cô dâu: giơ hoa bất ngờ → lấy đà → tung hoa → hạ tay
       const surprise = -40 * bump(seg(t, 3.1, 3.9));
       const windup = 35 * bump(seg(t, 6.15, 6.45));
@@ -426,6 +523,7 @@
       shots.forEach(([fx, fy], i) => setTimeout(() => launch(fx + R(-.05, .05), fy + R(-.05, .05), pals[(i + wave) % pals.length]), wave * 2000 + i * 220));
   }
   function burstAt(cx, cy, n, pal, speed = 1) { explode(cx * dpr, cy * dpr, n, pal, speed); }
+  window.__burst = (x, y) => burstAt(x, y, 36, pals[1], .7);
 
   function loop() {
     ctx.clearRect(0, 0, w, h);
