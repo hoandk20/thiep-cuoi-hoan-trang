@@ -369,7 +369,7 @@
       set(G.arm2, `rotate(${14 * amp * Math.sin(phase) + 150 * wave - 18 * waveSw} -5 -126)`);
       // tay trước cô dâu: đánh khi đi → che miệng bất ngờ khi thấy nhẫn → đặt lên vai chú rể khi hôn → vẫy chào
       const b2 = -10 * amp * Math.sin(phase) + 150 * bump(seg(t, 3.15, 3.95)) + 100 * (inOut(seg(t, 4.15, 4.45)) - inOut(seg(t, 5.1, 5.3))) + 120 * wave + 20 * waveSw;
-      set(B.arm2, `rotate(${b2} -6.4 -125)`);
+      set(B.arm2, `rotate(${b2} 4.8 -125)`);
       op_(G.box, clamp(seg(t, 2.85, 3.0) - seg(t, 3.75, 3.95)));
       set(G.box, `rotate(${-armA} 10 -75) translate(10 -75) scale(${1.6 * (.6 + .4 * outBack(seg(t, 2.85, 3.1)))}) translate(-10 75)`);
       set(G.lid, `rotate(${-110 * outBack(seg(t, 3.05, 3.35))} 2 -77)`);
@@ -384,7 +384,7 @@
       const surprise = -40 * bump(seg(t, 3.1, 3.9));
       const windup = 35 * bump(seg(t, 6.15, 6.45));
       const toss = -165 * (outBack(seg(t, 6.45, 6.75)) - inOut(seg(t, 7.0, 7.5)));
-      set(B.arm, `rotate(${surprise + windup + toss - 140 * wave - 22 * waveSw} 1.6 -125)`);
+      set(B.arm, `rotate(${surprise + windup + toss - 140 * wave - 22 * waveSw} -3.2 -125)`);
       // tung bó hoa: tách khỏi tay, bay vút lên xoay tròn
       once('release', t, 6.65, () => {
         const [x, y] = screenOf(B.bouquet); flyFrom = toSvg(x, y);
