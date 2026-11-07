@@ -12,7 +12,7 @@ window.WEDDING = {
   },
   bride: {
     shortName: "Thu Trang",
-    fullName: "Thu Trang", // sửa thành họ tên đầy đủ của cô dâu
+    fullName: "Từ Nữ Thu Trang",
     born: 2005,
     intro: "Một cô gái dịu dàng, tinh tế và đáng yêu. Nụ cười của cô là điều khiến anh muốn được nhìn thấy mỗi ngày.",
     parents: "Con gái của Ông … & Bà …" // sửa tên bố mẹ cô dâu
@@ -79,8 +79,8 @@ window.WEDDING = {
 
   // Hộp mừng cưới (sửa số tài khoản, thay ảnh QR trong /images)
   gifts: [
-    { who: "Mừng cưới Chú rể", bank: "Ngân hàng …", account: "0000000000", holder: "KIEU DINH HOAN", qr: "images/qr-groom.jpg" },
-    { who: "Mừng cưới Cô dâu", bank: "Ngân hàng …", account: "0000000000", holder: "THU TRANG", qr: "images/qr-bride.jpg" }
+    { who: "Mừng cưới Chú rể", bank: "TPBank", account: "2663 0102 000", holder: "KIEU DINH HOAN", qr: "images/qr-groom.png" },
+    { who: "Mừng cưới Cô dâu", bank: "Techcombank", account: "1509 2533 33", holder: "TU NU THU TRANG", qr: "images/qr-bride.png" }
   ],
 
   // Nhạc nền: file trong thư mục /music. Tên file nên viết không dấu, không khoảng trắng.

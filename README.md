@@ -10,7 +10,7 @@ Tất cả ảnh nằm trong thư mục **`images/`**. Chỉ cần chép ảnh t
 | `cover.jpg` | Ảnh nền đầu trang | nên dùng ảnh **ngang** để đẹp trên máy tính |
 | `couple.jpg` | Ảnh chung ở mục "Cô Dâu & Chú Rể" | dọc 4:5 |
 | `album-01.jpg` … `album-08.jpg` | Album, chuyện tình, nền trích dẫn & cuối trang | tuỳ ý |
-| `qr-groom.jpg` / `qr-bride.jpg` | Mã QR mừng cưới | vuông |
+| `qr-groom.png` / `qr-bride.png` | Mã QR mừng cưới | vuông, cắt sát mã QR |
 
 Muốn thêm ảnh album: bỏ ảnh vào `images/` rồi thêm đường dẫn vào mảng `album` trong `config.js`.
 Nên nén ảnh (~100–250KB/ảnh, cạnh dài ~1200px) để khách dùng 4G tải nhanh.

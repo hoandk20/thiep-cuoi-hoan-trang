@@ -128,7 +128,7 @@
     </div>`).join('');
   $('#giftGrid').addEventListener('click', e => {
     const b = e.target.closest('.copy-btn'); if (!b) return;
-    navigator.clipboard?.writeText(b.dataset.acc).then(() => toast('Đã sao chép số tài khoản 💝'), () => toast(b.dataset.acc));
+    navigator.clipboard?.writeText(b.dataset.acc.replace(/\s/g, '')).then(() => toast('Đã sao chép số tài khoản 💝'), () => toast(b.dataset.acc));
   });
 
   const toastEl = $('#toast');
