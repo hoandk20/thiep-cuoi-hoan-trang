@@ -356,35 +356,35 @@
       const hop = (t > 3.15 && t < 3.85 ? 16 * Math.abs(Math.sin(2 * Math.PI * seg(t, 3.15, 3.85))) : 0) + 6 * bump(tw);
       set(G.walk, `translate(0 ${-4 * amp * Math.abs(Math.sin(phase))})`);
       set(B.walk, `translate(0 ${-2.5 * amp * Math.abs(Math.sin(phase)) - hop})`);
-      set(G.legF, `rotate(${12 * amp * Math.sin(phase)} 9 -58)`);
-      set(G.legB, `rotate(${-12 * amp * Math.sin(phase)} -9 -58)`);
+      set(G.legF, `rotate(${20 * amp * Math.sin(phase)} 4 -58)`);
+      set(G.legB, `rotate(${-20 * amp * Math.sin(phase)} -4 -58)`);
       // tay chú rể: đánh khi đi → đưa hộp nhẫn → ôm eo → giơ cao nắm tay xoay cô dâu
       const offer = inOut(seg(t, 2.8, 3.2)) - inOut(seg(t, 3.75, 4.05));
       const hug = inOut(seg(t, 4.05, 4.5));
       const shake = (t > 2.95 && t < 3.3) ? 2.2 * Math.sin(t * 70) : 0;   // run tay hồi hộp
       const waveSw = Math.sin((tl - 7.6) * 11) * wave;
       const armA = -12 * amp * Math.sin(phase) - 75 * offer - 45 * hug * (1 - sep) - 105 * bump(tw) + shake - 100 * wave + 16 * waveSw;
-      set(G.arm, `rotate(${armA} 32 -122)`);
+      set(G.arm, `rotate(${armA} 3.4 -126)`);
       // tay sau chú rể: đánh ngược tay trước khi đi, giơ lên vẫy cùng lúc chào khách
-      set(G.arm2, `rotate(${14 * amp * Math.sin(phase) + 150 * wave - 18 * waveSw} -32 -122)`);
+      set(G.arm2, `rotate(${14 * amp * Math.sin(phase) + 150 * wave - 18 * waveSw} -5 -126)`);
       // tay trước cô dâu: đánh khi đi → che miệng bất ngờ khi thấy nhẫn → đặt lên vai chú rể khi hôn → vẫy chào
       const b2 = -10 * amp * Math.sin(phase) + 150 * bump(seg(t, 3.15, 3.95)) + 100 * (inOut(seg(t, 4.15, 4.45)) - inOut(seg(t, 5.1, 5.3))) + 120 * wave + 20 * waveSw;
-      set(B.arm2, `rotate(${b2} -19 -125)`);
+      set(B.arm2, `rotate(${b2} -6.4 -125)`);
       op_(G.box, clamp(seg(t, 2.85, 3.0) - seg(t, 3.75, 3.95)));
-      set(G.box, `rotate(${-armA} 46 -75) translate(46 -75) scale(${1.6 * (.6 + .4 * outBack(seg(t, 2.85, 3.1)))}) translate(-46 75)`);
-      set(G.lid, `rotate(${-110 * outBack(seg(t, 3.05, 3.35))} 38 -77)`);
-      set(B.head, `translate(0 ${8 * (bowL + bowR)}) rotate(${-9 * bump(seg(t, 3.2, 3.9)) - 10 * bowL + 10 * bowR - 10 * inOut(seg(t, 4.0, 4.45)) * (1 - seg(t, 5.2, 5.4))} -2 -148)`);
+      set(G.box, `rotate(${-armA} 10 -75) translate(10 -75) scale(${1.6 * (.6 + .4 * outBack(seg(t, 2.85, 3.1)))}) translate(-10 75)`);
+      set(G.lid, `rotate(${-110 * outBack(seg(t, 3.05, 3.35))} 2 -77)`);
+      set(B.head, `rotate(${-9 * bump(seg(t, 3.2, 3.9)) - 14 * (bowL + bowR) + 8 * inOut(seg(t, 4.0, 4.45)) * (1 - seg(t, 5.2, 5.4))} -2 -148)`);
       // nghiêng người hôn, tách nhẹ khi xoay, thở nhẹ
       const lean = inOut(seg(t, 4.0, 4.45)) * (1 - .8 * bump(tw)) * (1 - wave) * (1 - sep), breathe = t > 4.6 ? Math.sin((t - 4.6) * 2.4) * .7 : 0;
-      set(G.head, `translate(0 ${8 * (bowL + bowR)}) rotate(${6 * bump(seg(t, 2.6, 3.2)) - 10 * bowL + 10 * bowR + 12 * lean} 0 -150)`);
-      set(G.lean, `rotate(${4 * lean + breathe - 8 * bowL + 8 * bowR} 0 0) scale(${Math.cos(Math.PI * gTurn)} 1)`);
+      set(G.head, `rotate(${6 * bump(seg(t, 2.6, 3.2)) + 14 * (bowL + bowR) + 12 * lean} 0 -150)`);
+      set(G.lean, `rotate(${4 * lean + breathe - 18 * bowL + 18 * bowR} 0 0) scale(${Math.cos(Math.PI * gTurn)} 1)`);
       const spin = Math.cos(2 * Math.PI * twE), flare = 1 + .18 * bump(tw);
-      set(B.lean, `translate(0 ${-9 * lean}) rotate(${-4 * lean - breathe - 8 * bowL + 8 * bowR} 0 0) scale(${spin * flare * Math.cos(Math.PI * bTurn)} 1)`);
+      set(B.lean, `translate(0 ${-9 * lean}) rotate(${-4 * lean - breathe - 18 * bowL + 18 * bowR} 0 0) scale(${spin * flare * Math.cos(Math.PI * bTurn)} 1)`);
       // tay cô dâu: giơ hoa bất ngờ → lấy đà → tung hoa → hạ tay
       const surprise = -40 * bump(seg(t, 3.1, 3.9));
       const windup = 35 * bump(seg(t, 6.15, 6.45));
       const toss = -165 * (outBack(seg(t, 6.45, 6.75)) - inOut(seg(t, 7.0, 7.5)));
-      set(B.arm, `rotate(${surprise + windup + toss - 140 * wave - 22 * waveSw} 19 -125)`);
+      set(B.arm, `rotate(${surprise + windup + toss - 140 * wave - 22 * waveSw} 4.8 -125)`);
       // tung bó hoa: tách khỏi tay, bay vút lên xoay tròn
       once('release', t, 6.65, () => {
         const [x, y] = screenOf(B.bouquet); flyFrom = toSvg(x, y);
@@ -392,7 +392,7 @@
       });
       if (flyFrom) {
         const p = seg(t, 6.65, 7.6);
-        set(fly, `translate(${flyFrom.x + 70 * p} ${flyFrom.y - 360 * outCubic(p)}) rotate(${600 * p}) scale(${1.1 + .3 * p}) translate(-32 78)`);
+        set(fly, `translate(${flyFrom.x + 70 * p} ${flyFrom.y - 360 * outCubic(p)}) rotate(${600 * p}) scale(${1.1 + .3 * p}) translate(4.8 80)`);
         fly.style.opacity = 1 - seg(t, 7.35, 7.6);
       }
       once('catch', t, 7.45, () => { const [x, y] = screenOf(fly); burstAt(x, y, 40, pals[0], .7); });
@@ -400,7 +400,7 @@
       const heart = seg(t, 3.25, 3.35) - seg(t, 4.1, 4.2);
       const closed = Math.max(seg(t, 4.35, 4.5) - seg(t, 5.2, 5.3), clamp((bowL + bowR) * 2 - .6));
       op_(B.eyeH, heart);
-      set(B.eyeH, `translate(0 -168) scale(${1 + .15 * Math.abs(Math.sin(t * 9))}) translate(0 168)`);
+      set(B.eyeH, `translate(-19 -166) scale(${1.15 + .25 * Math.abs(Math.sin(t * 9))}) translate(19 166)`);
       op_(B.eyeO, (1 - closed) * (1 - heart)); op_(B.eyeC, closed);
       op_(G.eyeO, 1 - closed); op_(G.eyeC, closed);
       op_(G.blush, seg(t, 4.45, 5)); op_(B.blush, Math.max(seg(t, 4.45, 5), heart * .8));
