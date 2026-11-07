@@ -65,6 +65,11 @@ window.WEDDING = {
     { date: "27 & 28 . 12 . 2026", title: "Về chung một nhà", text: "Ngày chúng mình chính thức nắm tay nhau trước hai họ, hứa hẹn yêu thương trọn đời.", photo: "images/album-01.jpg" }
   ],
 
+  // (Tuỳ chọn) Toạ độ để hiện bản đồ Google thật trong thẻ sự kiện.
+  // Cách lấy: mở link Google Maps → nhấn giữ vào điểm ghim → copy dãy số dạng "21.0285, 105.8542".
+  // Để trống "" thì hiện bản đồ minh hoạ.
+  mapCoords: { groom: "", bride: "" },
+
   // Album ảnh — thêm bao nhiêu ảnh cũng được, chỉ cần đúng đường dẫn
   album: [
     "images/album-04.jpg", "images/album-06.jpg", "images/album-02.jpg", "images/album-03.jpg",

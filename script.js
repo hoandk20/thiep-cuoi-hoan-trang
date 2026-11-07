@@ -39,6 +39,44 @@
       </div>
     </div>`).join('');
 
+  /* ---- Bản đồ nhỏ cho từng địa điểm ----
+     Có toạ độ (mapCoords: "21.0285,105.8542") → hiện bản đồ Google thật.
+     Chưa có → bản đồ minh hoạ có ghim, bấm vào mở Google Maps. */
+  function miniMap(e) {
+    const isBride = /gái/i.test(e.side);
+    const label = isBride ? 'Nhà Gái' : 'Nhà Trai';
+    const coords = W.mapCoords && W.mapCoords[isBride ? 'bride' : 'groom'];
+    if (coords) {
+      return `<a class="map-card real" href="${esc(e.map)}" target="_blank" rel="noopener" aria-label="Mở bản đồ ${label}">
+        <iframe loading="lazy" tabindex="-1" src="https://maps.google.com/maps?q=${encodeURIComponent(coords)}&z=16&output=embed" title="Bản đồ ${label}"></iframe>
+        <span class="map-chip">🗺️ Chạm để mở Google Maps</span></a>`;
+    }
+    const v = isBride ? 1 : 0;
+    const roads = v
+      ? 'M-10 120 Q90 100 160 112 T330 92 M70 -10 Q84 70 70 190 M200 -10 Q216 90 236 190 M-10 50 H330'
+      : 'M-10 70 Q120 86 330 60 M110 -10 Q96 90 120 190 M240 -10 Q226 80 250 190 M-10 140 Q160 128 330 150';
+    const route = v ? 'M30 160 Q60 118 92 112 T160 112 Q190 110 214 84' : 'M24 34 Q70 70 110 76 T170 82 Q196 86 214 84';
+    return `<a class="map-card" href="${esc(e.map)}" target="_blank" rel="noopener" aria-label="Mở bản đồ chỉ đường tới ${label}">
+      <svg viewBox="0 0 320 180" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <rect width="320" height="180" fill="#f4ecdc"/>
+        <path d="${v ? 'M-10 0 Q40 90 -10 180Z' : 'M330 0 Q270 100 330 180Z'}" fill="#cfe3ea"/>
+        <ellipse cx="${v ? 270 : 50}" cy="${v ? 40 : 140}" rx="46" ry="28" fill="#d7e8c8"/>
+        <g fill="#eadfc8"><rect x="130" y="18" width="40" height="26" rx="4"/><rect x="${v ? 100 : 150}" y="130" width="54" height="30" rx="4"/><rect x="${v ? 250 : 20}" y="${v ? 130 : 90}" width="44" height="28" rx="4"/></g>
+        <path d="${roads}" fill="none" stroke="#e2cfa6" stroke-width="13" stroke-linecap="round"/>
+        <path d="${roads}" fill="none" stroke="#fffaf0" stroke-width="9" stroke-linecap="round"/>
+        <path class="route" d="${route}" fill="none" stroke="#c33a55" stroke-width="4" stroke-linecap="round" stroke-dasharray="2 9"/>
+        <circle cx="${v ? 30 : 24}" cy="${v ? 160 : 34}" r="6" fill="#3b82c4" stroke="#fff" stroke-width="2.5"/>
+        <g transform="translate(214 84)">
+          <ellipse class="pin-pulse" cx="0" cy="0" rx="14" ry="5" fill="#c33a55"/>
+          <g class="pin"><path d="M0 0C-4-10-16-18-16-30A16 16 0 1 1 16-30C16-18 4-10 0 0Z" fill="#7a1c30" stroke="#f2d58a" stroke-width="2"/>
+            <text x="0" y="-24" text-anchor="middle" font-size="16" fill="#f7e3a8" font-family="serif">囍</text></g>
+          <g transform="translate(0 -62)"><rect x="-38" y="-13" width="76" height="24" rx="12" fill="#fff" stroke="#d4a548"/>
+            <text x="0" y="4" text-anchor="middle" font-size="12.5" font-weight="600" fill="#7a1c30" font-family="Be Vietnam Pro,sans-serif">${label}</text></g>
+        </g>
+      </svg>
+      <span class="map-chip">🗺️ Chạm để mở bản đồ</span></a>`;
+  }
+
   /* ---- Events grouped by day ---- */
   $('#eventDays').innerHTML = W.events.map(day => `
     <div class="ev-day">
@@ -51,6 +89,7 @@
           <p class="event-side">${esc(e.side)}</p>
           <p class="event-time">${esc(e.time)}</p>
           <p class="event-addr">${esc(e.address)}</p>
+          ${miniMap(e)}
           <a class="btn-gold" href="${esc(e.map)}" target="_blank" rel="noopener">📍 Chỉ đường</a>
         </article>`).join('')}
       </div>
@@ -136,23 +175,98 @@
   // Trình duyệt chặn tự phát nhạc: phát ở lần chạm/click đầu tiên nếu chưa phát
   ['pointerdown', 'touchend', 'keydown'].forEach(ev => document.addEventListener(ev, () => { if (audio.paused && !userPaused) tryPlay(); }, { passive: true }));
 
-  /* ---- Opening: phong bì → cô dâu chú rể hôn nhau → cổng mở + pháo hoa ---- */
+  /* ---- Opening: phong bì → cầu hôn → hôn nhau → cổng mở + pháo hoa ---- */
   const op = $('#opening'), env = $('#envelope');
   let opened = false;
   function openCard() {
     if (opened) return; opened = true;
     userPaused = false; tryPlay();              // nhạc chạy ngay khi chạm phong bì
-    op.classList.add('kiss');                   // nắp phong bì mở, hiện cảnh hôn nhau
-    setTimeout(() => explodeAt(.5, .36), 3500); // tim nổ đúng lúc hôn
+    op.classList.add('kiss');                   // nắp phong bì mở, hiện sân khấu
+    coupleTimeline();
     setTimeout(() => {
       op.classList.add('open');                 // 2 cánh cổng mở
       fireworks();
       document.body.classList.remove('locked');
-    }, 6300);
-    setTimeout(() => op.classList.add('gone'), 8700);
+    }, 7000);
+    setTimeout(() => op.classList.add('gone'), 9400);
   }
   env.addEventListener('click', openCard);
   env.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openCard(); } });
+
+  /* ---- Diễn hoạt cô dâu chú rể: mỗi khung hình tính lại tư thế từ thời gian t (giây) ----
+     0.9–2.7 đi vào · 2.8–3.9 chú rể lấy hộp nhẫn, cô dâu nhảy cẫng lên
+     3.9–4.4 tiến lại gần · 4.4 hôn · 5.3 cô dâu giơ bó hoa · sau đó thở nhẹ */
+  function coupleTimeline() {
+    const svg = $('.kiss-svg');
+    const q = (s) => svg.querySelector(s);
+    const G = { root: q('.groom'), walk: q('.groom .walker'), lean: q('.groom .lean'), legF: q('.g-leg.front'), legB: q('.g-leg.back'),
+      arm: q('.g-arm'), head: q('.g-head'), box: q('.ringbox'), lid: q('.ringbox .lid'), eyeO: q('.g-head .eye-open'), eyeC: q('.g-head .eye-closed'), blush: q('.g-head .blush') };
+    const B = { root: q('.bride'), walk: q('.bride .walker'), lean: q('.bride .lean'), arm: q('.b-arm'), head: q('.b-head'), foot: q('.b-foot'),
+      eyeO: q('.b-head .eye-open'), eyeC: q('.b-head .eye-closed'), blush: q('.b-head .blush') };
+    const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+    const seg = (t, a, b) => clamp((t - a) / (b - a));
+    const inOut = p => p < .5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
+    const outQuad = p => 1 - (1 - p) * (1 - p);
+    const outBack = p => { const c = 1.70158; return 1 + (c + 1) * Math.pow(p - 1, 3) + c * Math.pow(p - 1, 2); };
+    const bump = p => Math.sin(Math.PI * clamp(p));          // 0 → 1 → 0 mượt
+    const set = (el, v) => el && el.setAttribute('transform', v);
+    const op_ = (el, v) => el && (el.style.opacity = v);
+    const screenOf = (el) => { const r = el.getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2]; };
+    const fired = {};
+    const once = (k, t, at, fn) => { if (t >= at && !fired[k]) { fired[k] = 1; fn(); } };
+    const t0 = performance.now();
+
+    function frame(now) {
+      const t = (now - t0) / 1000;
+      // --- đi vào: giảm tốc dần, bước chân tính theo quãng đường nên không trượt chân ---
+      const pw = seg(t, .9, 2.7), walkD = 170 * outQuad(pw);
+      const pa = seg(t, 3.9, 4.4), appD = 36 * inOut(pa);
+      const amp = (pw > 0 && pw < 1 ? Math.pow(1 - pw, .7) : 0) + .45 * bump(pa);
+      const phase = (walkD + appD) / 44 * Math.PI * 2;
+      const gx = -240 + walkD + appD, bx = 240 - walkD - appD;
+      const vis = clamp((t - .9) / .35);
+      op_(G.root, vis); op_(B.root, vis);
+      set(G.root, `translate(${gx} 0)`); set(B.root, `translate(${bx} 0)`);
+      // nhún theo bước; cô dâu nhảy cẫng 2 lần khi thấy nhẫn
+      const hop = 16 * Math.abs(Math.sin(2 * Math.PI * seg(t, 3.15, 3.85))) * (t > 3.15 && t < 3.85 ? 1 : 0);
+      set(G.walk, `translate(0 ${-4 * amp * Math.abs(Math.sin(phase))})`);
+      set(B.walk, `translate(0 ${-2.5 * amp * Math.abs(Math.sin(phase)) - hop})`);
+      // chân & tay đánh theo nhịp
+      set(G.legF, `rotate(${18 * amp * Math.sin(phase)} 11 -64)`);
+      set(G.legB, `rotate(${-18 * amp * Math.sin(phase)} -11 -64)`);
+      // tay chú rể: đánh khi đi → đưa hộp nhẫn → hạ xuống → ôm eo
+      const offer = inOut(seg(t, 2.8, 3.2)) - inOut(seg(t, 3.75, 4.05));
+      const hug = inOut(seg(t, 4.05, 4.5));
+      const armA = -12 * amp * Math.sin(phase) - 75 * offer - 45 * hug;
+      set(G.arm, `rotate(${armA} 31 -130)`);
+      // hộp nhẫn luôn đứng thẳng, nắp bật mở
+      op_(G.box, clamp(seg(t, 2.85, 3.0) - seg(t, 3.75, 3.95)));
+      set(G.box, `rotate(${-armA} 35 -69) translate(35 -69) scale(${1.6 * (.6 + .4 * outBack(seg(t, 2.85, 3.1)))}) translate(-35 69)`);
+      set(G.lid, `rotate(${-110 * outBack(seg(t, 3.05, 3.35))} 27 -71)`);
+      // đầu: chú rể gật, cô dâu nghiêng đầu e thẹn
+      set(G.head, `rotate(${6 * bump(seg(t, 2.6, 3.2))} 0 -150)`);
+      set(B.head, `rotate(${-9 * bump(seg(t, 3.2, 3.9))} -2 -148)`);
+      // nghiêng người hôn + thở nhẹ sau đó
+      const lean = inOut(seg(t, 4.0, 4.45)), breathe = t > 4.6 ? Math.sin((t - 4.6) * 2.4) * .7 : 0;
+      set(G.lean, `rotate(${4 * lean + breathe} 0 0)`);
+      set(B.lean, `translate(0 ${-4 * lean}) rotate(${-4 * lean - breathe} 0 0)`);
+      // tay cô dâu: giơ hoa bất ngờ khi nhảy → giơ cao ăn mừng sau nụ hôn
+      const surprise = -40 * bump(seg(t, 3.1, 3.9)), cheer = -150 * outBack(seg(t, 5.3, 6.0));
+      set(B.arm, `rotate(${surprise + cheer + (t > 6 ? Math.sin((t - 6) * 4) * 6 : 0)} 10 -133)`);
+      // hất chân sau, nhắm mắt, má hồng
+      const fp = seg(t, 4.45, 5.0);
+      op_(B.foot, clamp(fp * 3)); set(B.foot, `rotate(${50 * (1 - outBack(fp))} 30 -12)`);
+      const kiss = seg(t, 4.35, 4.5);
+      [G, B].forEach(P => { op_(P.eyeO, 1 - kiss); op_(P.eyeC, kiss); op_(P.blush, seg(t, 4.45, 5)); });
+      // hiệu ứng hạt: nhẫn lấp lánh, tim vui trên đầu cô dâu, tim nổ khi hôn
+      once('ring', t, 3.25, () => { const [x, y] = screenOf(q('.ringbox .ring')); burstAt(x, y, 26, pals[0], .5); });
+      once('joy1', t, 3.3, () => { const [x, y] = screenOf(B.head); burstAt(x, y - 30, 14, pals[1], .45); });
+      once('joy2', t, 3.65, () => { const [x, y] = screenOf(B.head); burstAt(x, y - 30, 14, pals[3], .45); });
+      once('kiss', t, 4.5, () => { const [x1, y1] = screenOf(G.head), [x2, y2] = screenOf(B.head); burstAt((x1 + x2) / 2, Math.min(y1, y2) - 10, 60, pals[1], 1); });
+      if (t < 9.5) requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  }
 
   /* ---- FX: petals, gold sparkles, fireworks ---- */
   const cv = $('#fx'), ctx = cv.getContext('2d');
@@ -176,9 +290,9 @@
     ctx.save(); ctx.globalAlpha = a; ctx.fillStyle = c; ctx.translate(x, y); ctx.scale(s, s);
     ctx.beginPath(); ctx.moveTo(0, 3); ctx.bezierCurveTo(-5, -2, -2, -6, 0, -3); ctx.bezierCurveTo(2, -6, 5, -2, 0, 3); ctx.fill(); ctx.restore();
   }
-  function explode(x, y, n, palette) {
+  function explode(x, y, n, palette, speed = 1) {
     for (let i = 0; i < n; i++) {
-      const ang = (i / n) * Math.PI * 2 + R(-.1, .1), sp = R(1.5, 8) * dpr;
+      const ang = (i / n) * Math.PI * 2 + R(-.1, .1), sp = R(1.5, 8) * dpr * speed;
       parts.push({ x, y, vx: Math.cos(ang) * sp, vy: Math.sin(ang) * sp, life: 1, decay: R(.007, .013), c: palette[i % palette.length], heart: Math.random() < .3, s: R(1.4, 2.6) * dpr });
     }
   }
@@ -193,7 +307,7 @@
     for (let wave = 0; wave < 3; wave++)
       shots.forEach(([fx, fy], i) => setTimeout(() => launch(fx + R(-.05, .05), fy + R(-.05, .05), pals[(i + wave) % pals.length]), wave * 2000 + i * 220));
   }
-  function explodeAt(fx, fy) { explode(w * fx, h * fy, 50, pals[1]); }
+  function burstAt(cx, cy, n, pal, speed = 1) { explode(cx * dpr, cy * dpr, n, pal, speed); }
 
   function loop() {
     ctx.clearRect(0, 0, w, h);
