@@ -133,7 +133,6 @@ a{color:inherit}
 .env-small{letter-spacing:.35em;text-transform:uppercase;font-size:.72rem;color:var(--gold-light)}
 .env-names{font-size:clamp(2.6rem,10vw,3.6rem);line-height:1.15;margin:10px 0 0}
 .env-date{font-family:var(--serif);letter-spacing:.25em;color:var(--gold-light);margin-bottom:26px}
-.env-hint{font-size:.75rem;color:rgba(255,255,255,.6);margin-top:16px}
 
 .btn-gold{position:relative;overflow:hidden;display:inline-block;font:600 1rem var(--sans);letter-spacing:.08em;cursor:pointer;border:0;border-radius:40px;padding:14px 38px;
   color:#3d0a16;text-decoration:none;background:var(--gold-grad);background-size:200% 100%;
@@ -163,7 +162,7 @@ a{color:inherit}
 
 /* ---------- Hero ---------- */
 .hero{position:relative;height:100vh;height:100svh;min-height:600px;display:grid;place-items:center;overflow:hidden;color:#fff;text-align:center}
-.hero-bg{position:absolute;inset:-5%;background-size:cover;background-position:center;transform:scale(1.15);animation:kenburns 24s ease-in-out infinite alternate}
+.hero-bg{position:absolute;inset:-5%;background-size:cover;background-position:center 58%;transform:scale(1.15);animation:kenburns 24s ease-in-out infinite alternate}
 @keyframes kenburns{to{transform:scale(1.02) translate(-1.5%,1%)}}
 .hero-overlay{position:absolute;inset:0;background:
   radial-gradient(ellipse at center,rgba(40,5,15,.25),rgba(40,5,15,.75) 80%),
@@ -238,19 +237,21 @@ a{color:inherit}
 
 /* ---------- Couple ---------- */
 .couple{background:#fff}
-.couple-grid{display:grid;grid-template-columns:1fr auto 1fr;gap:30px;align-items:center;max-width:1000px;margin:0 auto}
-.frame-wrap{position:relative;width:min(300px,76vw);margin:0 auto 26px}
-.frame{position:relative;aspect-ratio:4/5;border-radius:200px 200px 16px 16px;overflow:hidden;border:5px solid #fff;box-shadow:0 20px 50px rgba(0,0,0,.18)}
-.ring{position:absolute;inset:-12px;border-radius:212px 212px 24px 24px;padding:2px;background:var(--gold-grad);background-size:250% 100%;animation:shimmer 5s linear infinite;
+.couple-grid{display:grid;grid-template-columns:1fr auto 1fr;grid-template-areas:"groom photo bride";gap:40px;align-items:center;max-width:1100px;margin:0 auto}
+.couple-photo{grid-area:photo}.groom-info{grid-area:groom}.bride-info{grid-area:bride}
+.frame-wrap{position:relative;width:min(380px,80vw);margin:0 auto}
+.frame{position:relative;aspect-ratio:4/5;border-radius:220px 220px 18px 18px;overflow:hidden;border:6px solid #fff;box-shadow:0 24px 60px rgba(0,0,0,.2)}
+.ring{position:absolute;inset:-14px;border-radius:234px 234px 26px 26px;padding:2px;background:var(--gold-grad);background-size:250% 100%;animation:shimmer 5s linear infinite;
   -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude}
+.couple-photo .heart-mid{position:absolute;left:50%;bottom:-35px;transform:translateX(-50%);z-index:2}
 .frame img{width:100%;height:100%;object-fit:cover;transition:transform 1.2s}
-.person:hover .frame img{transform:scale(1.07)}
+.couple-photo:hover .frame img{transform:scale(1.06)}
 .role{letter-spacing:.35em;text-transform:uppercase;font-size:.75rem;color:var(--gold-deep)}
 .person h3{font-size:2.8rem;line-height:1.35;padding:0 .15em}
 .born{font-family:var(--serif);font-style:italic}
 .parents{font-size:.9rem;color:var(--muted)}
 .intro{max-width:340px;margin:12px auto 0;font-size:.95rem}
-.heart-mid span{display:inline-grid;place-items:center;width:70px;height:70px;border-radius:50%;font-size:1.8rem;color:#fff;
+.heart-mid span{box-sizing:border-box;display:inline-grid;place-items:center;width:70px;height:70px;border-radius:50%;font-size:1.8rem;color:#fff;
   background:radial-gradient(circle at 35% 30%,#e04a66,#7a1c30);border:2px solid var(--gold);animation:beat 1.4s infinite;box-shadow:0 0 30px rgba(224,74,102,.5)}
 @keyframes beat{0%,100%{transform:scale(1)}15%{transform:scale(1.18)}30%{transform:scale(1)}45%{transform:scale(1.1)}}
 
@@ -335,7 +336,7 @@ a{color:inherit}
 
 /* ---------- Mobile ---------- */
 @media (max-width:760px){
-  .couple-grid{grid-template-columns:1fr;gap:40px}
+  .couple-grid{grid-template-columns:1fr;grid-template-areas:"photo" "groom" "bride";gap:50px}
   .timeline::before{left:13px}
   .tl-item{grid-template-columns:28px 1fr;gap:12px 16px}
   .tl-item .tl-dot,.tl-item:nth-child(even) .tl-dot{order:0;grid-row:span 2;align-self:start;margin-top:8px}

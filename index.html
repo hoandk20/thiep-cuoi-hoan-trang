@@ -12,7 +12,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Be+Vietnam+Pro:wght@300;400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=5">
+  <link rel="stylesheet" href="style.css?v=6">
 </head>
 <body class="locked">
 
@@ -59,7 +59,6 @@
       <svg class="flourish"><use href="#flourish"/></svg>
       <p class="env-date" data-k="dateText"></p>
       <span id="openBtn" class="btn-gold">Mở thiệp ✉</span>
-      <p class="env-hint">Chạm vào phong bì để mở · bật âm thanh ♫</p>
     </div>
 
     <!-- Hoạt ảnh cô dâu chú rể hôn nhau -->
@@ -227,23 +226,21 @@
     <section id="couple" class="section couple">
       <h2 class="section-title reveal">Cô Dâu & Chú Rể</h2>
       <div class="couple-grid">
-        <article class="person reveal from-left">
+        <div class="couple-photo reveal">
           <div class="frame-wrap">
             <div class="ring"></div>
-            <div class="frame"><img data-src-k="groom.photo" alt="Chú rể"></div>
+            <div class="frame"><img data-src-k="couplePhoto" alt="Cô dâu và chú rể"></div>
+            <div class="heart-mid"><span>❤</span></div>
           </div>
+        </div>
+        <article class="person groom-info reveal from-left">
           <p class="role">Chú rể</p>
           <h3 class="script gold-deep" data-k="groom.fullName"></h3>
           <p class="born">Sinh năm <span data-k="groom.born"></span></p>
           <p class="parents" data-k="groom.parents"></p>
           <p class="intro" data-k="groom.intro"></p>
         </article>
-        <div class="heart-mid reveal"><span>❤</span></div>
-        <article class="person reveal from-right">
-          <div class="frame-wrap">
-            <div class="ring"></div>
-            <div class="frame"><img data-src-k="bride.photo" alt="Cô dâu"></div>
-          </div>
+        <article class="person bride-info reveal from-right">
           <p class="role">Cô dâu</p>
           <h3 class="script gold-deep" data-k="bride.fullName"></h3>
           <p class="born">Sinh năm <span data-k="bride.born"></span></p>
@@ -300,7 +297,7 @@
 
   <div id="toast" class="toast"></div>
 
-  <script src="config.js?v=5"></script>
-  <script src="script.js?v=5"></script>
+  <script src="config.js?v=6"></script>
+  <script src="script.js?v=6"></script>
 </body>
 </html>

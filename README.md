@@ -5,12 +5,11 @@ Web thiệp cưới tĩnh (HTML/CSS/JS thuần), chạy trên GitHub Pages.
 ## Thay ảnh cưới
 Tất cả ảnh nằm trong thư mục **`images/`**. Chỉ cần chép ảnh thật **đè lên đúng tên file**:
 
-| File | Dùng ở đâu | Tỉ lệ gợi ý |
+| File | Dùng ở đâu | Gợi ý |
 |---|---|---|
-| `cover.jpg` | Ảnh nền đầu trang + chân trang | ngang 3:2 |
-| `groom.jpg` / `bride.jpg` | Ảnh chú rể / cô dâu | dọc 4:5 |
-| `couple-1.jpg`, `couple-2.jpg` | Chuyện tình yêu | ngang/dọc đều được |
-| `album-01.jpg` … `album-09.jpg` | Album ảnh | tuỳ ý |
+| `cover.jpg` | Ảnh nền đầu trang | nên dùng ảnh **ngang** để đẹp trên máy tính |
+| `couple.jpg` | Ảnh chung ở mục "Cô Dâu & Chú Rể" | dọc 4:5 |
+| `album-01.jpg` … `album-08.jpg` | Album, chuyện tình, nền trích dẫn & cuối trang | tuỳ ý |
 | `qr-groom.jpg` / `qr-bride.jpg` | Mã QR mừng cưới | vuông |
 
 Muốn thêm ảnh album: bỏ ảnh vào `images/` rồi thêm đường dẫn vào mảng `album` trong `config.js`.

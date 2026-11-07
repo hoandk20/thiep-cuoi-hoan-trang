@@ -9,7 +9,9 @@
   /* ---- Bind text & images from config ---- */
   $$('[data-k]').forEach(el => { const v = get(el.dataset.k); if (v !== undefined) el.textContent = v; });
   $$('[data-src-k]').forEach(el => { el.src = url(get(el.dataset.srcK)); });
-  ['#heroBg', '#footerBg', '#quoteBand'].forEach(s => { $(s).style.backgroundImage = `url('${url(W.coverPhoto)}')`; });
+  $('#heroBg').style.backgroundImage = `url('${url(W.coverPhoto)}')`;
+  $('#quoteBand').style.backgroundImage = `url('${url(W.quotePhoto || W.coverPhoto)}')`;
+  $('#footerBg').style.backgroundImage = `url('${url(W.footerPhoto || W.coverPhoto)}')`;
 
   /* ---- Two wedding days ---- */
   $('#days').innerHTML = W.days.map(d => `
