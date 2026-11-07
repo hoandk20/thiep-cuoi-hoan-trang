@@ -399,13 +399,13 @@
       once('catch', t, 7.45, () => { const [x, y] = screenOf(fly); burstAt(x, y, 40, pals[0], .7); });
       // mắt: tim khi thấy nhẫn → nhắm khi hôn → mở khi xoay
       const heart = seg(t, 3.25, 3.35) - seg(t, 4.1, 4.2);
-      const closed = Math.max(seg(t, 4.35, 4.5) - seg(t, 5.2, 5.3), clamp((bowL + bowR) * 2 - .6));
+      const closed = Math.max(seg(t, 4.35, 4.5) - seg(t, 5.2, 5.3), clamp((bowL + bowR) * 2 - .6), clamp((lean - .55) / .3));
       op_(B.eyeH, heart);
       set(B.eyeH, `translate(-12 -168) scale(${1.25 + .3 * Math.abs(Math.sin(t * 9))}) translate(12 168)`);
       op_(B.eyeO, (1 - closed) * (1 - heart)); op_(B.eyeC, closed);
       op_(G.eyeO, 1 - closed); op_(G.eyeC, closed);
       // môi chu ra lúc hôn
-      const kissLips = seg(t, 4.3, 4.45) - seg(t, 5.2, 5.3);
+      const kissLips = Math.max(seg(t, 4.3, 4.45) - seg(t, 5.2, 5.3), clamp((lean - .55) / .3));   // chu môi mọi lúc hai người kề sát hôn
       lips.forEach(L => { op_(L.m, 1 - kissLips); op_(L.p, kissLips); });
       op_(G.blush, seg(t, 4.45, 5)); op_(B.blush, Math.max(seg(t, 4.45, 5), heart * .8));
       // hất chân sau khi hôn (ẩn khi xoay)
