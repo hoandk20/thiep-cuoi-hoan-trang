@@ -12,7 +12,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Be+Vietnam+Pro:wght@300;400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=4">
+  <link rel="stylesheet" href="style.css?v=5">
 </head>
 <body class="locked">
 
@@ -65,50 +65,92 @@
     <!-- Hoạt ảnh cô dâu chú rể hôn nhau -->
     <div class="kiss-scene" aria-hidden="true">
       <div class="kiss-glow"></div>
-      <svg class="kiss-svg" viewBox="-200 -260 400 280">
+      <svg class="kiss-svg" viewBox="-220 -290 440 310">
         <defs>
           <linearGradient id="silGold" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0" stop-color="#fff1c4"/><stop offset=".5" stop-color="#e2b45a"/><stop offset="1" stop-color="#a8792a"/>
           </linearGradient>
-          <linearGradient id="veilGrad" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0" stop-color="#fff" stop-opacity=".85"/><stop offset="1" stop-color="#fff" stop-opacity=".15"/>
+          <linearGradient id="suitDark" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#d9aa52"/><stop offset="1" stop-color="#8f6420"/>
           </linearGradient>
+          <linearGradient id="veilGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#fff" stop-opacity=".9"/><stop offset="1" stop-color="#fff" stop-opacity=".1"/>
+          </linearGradient>
+          <linearGradient id="dressGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#f3e4cc"/>
+          </linearGradient>
+          <radialGradient id="blush"><stop offset="0" stop-color="#ff7a93" stop-opacity=".8"/><stop offset="1" stop-color="#ff7a93" stop-opacity="0"/></radialGradient>
         </defs>
-        <ellipse cx="0" cy="2" rx="150" ry="8" fill="#000" opacity=".25"/>
-        <!-- Chú rể (nhìn sang phải) -->
-        <g class="groom">
-          <g class="lean">
-            <path d="M-16 -146 Q0 -138 16 -146 L34 -132 Q40 -100 36 -62 L22 -62 L20 0 L4 0 L0 -54 L-4 0 L-20 0 L-22 -62 L-36 -62 Q-40 -100 -34 -132 Z" fill="url(#silGold)"/>
-            <path d="M-6 -146 L0 -124 L6 -146 Z" fill="#3d0a16"/>
-            <path d="M-6 -136 l6 4 l6 -4 l-6 -3 z" fill="#7a1c30"/>
-            <path d="M30 -128 Q52 -112 58 -92 L50 -88 Q42 -104 26 -112 Z" fill="url(#silGold)"/>
-            <rect x="-8" y="-158" width="16" height="14" fill="url(#silGold)"/>
-            <circle cx="2" cy="-176" r="22" fill="url(#silGold)"/>
-            <path d="M-22 -178 Q-22 -202 2 -200 Q22 -200 24 -184 Q14 -194 0 -190 Q-12 -188 -14 -172 Z" fill="#3d0a16"/>
-          </g>
+
+        <!-- Trái tim vàng tự vẽ bao quanh -->
+        <path class="big-heart" pathLength="1" d="M0 12 C-40 -30 -175 -80 -175 -175 C-175 -250 -65 -275 0 -200 C65 -275 175 -250 175 -175 C175 -80 40 -30 0 12 Z"/>
+        <g class="twinkles">
+          <path d="M-150 -235l4 10 10 4-10 4-4 10-4-10-10-4 10-4z" style="--d:0s"/>
+          <path d="M160 -215l3 8 8 3-8 3-3 8-3-8-8-3 8-3z" style="--d:.3s"/>
+          <path d="M-185 -110l3 8 8 3-8 3-3 8-3-8-8-3 8-3z" style="--d:.6s"/>
+          <path d="M185 -95l4 10 10 4-10 4-4 10-4-10-10-4 10-4z" style="--d:.15s"/>
+          <path d="M0 -265l4 10 10 4-10 4-4 10-4-10-10-4 10-4z" style="--d:.45s"/>
         </g>
-        <!-- Cô dâu (nhìn sang trái) -->
-        <g class="bride">
-          <g class="lean">
-            <path class="veil" d="M10 -186 Q60 -170 74 -90 Q86 -30 96 0 L40 0 Q50 -80 18 -150 Z" fill="url(#veilGrad)"/>
-            <path d="M-12 -138 Q0 -132 12 -138 L18 -100 Q40 -50 64 0 L-60 0 Q-38 -50 -18 -100 Z" fill="#fffaf0"/>
-            <path d="M-12 -138 Q0 -132 12 -138 L16 -104 L-16 -104 Z" fill="#f5e6cf"/>
-            <path d="M-14 -104 Q0 -96 16 -104" stroke="#d4a548" stroke-width="3" fill="none"/>
-            <rect x="-6" y="-150" width="12" height="13" fill="#fdebd3"/>
-            <circle cx="-2" cy="-166" r="19" fill="#fdebd3"/>
-            <path d="M-20 -168 Q-22 -190 0 -188 Q20 -188 18 -164 Q24 -150 14 -142 Q12 -160 4 -170 Q-6 -178 -20 -168 Z" fill="#3d0a16"/>
-            <circle cx="16" cy="-180" r="8" fill="#3d0a16"/>
-            <circle cx="10" cy="-186" r="3" fill="#f7e3a8"/>
-            <g class="bouquet"><circle cx="-26" cy="-96" r="9" fill="#e04a66"/><circle cx="-18" cy="-102" r="7" fill="#f7c6cf"/><circle cx="-32" cy="-104" r="6" fill="#f2a7b5"/></g>
+
+        <ellipse class="ground" cx="0" cy="3" rx="150" ry="8" fill="#000" opacity=".28"/>
+
+        <!-- ===== CHÚ RỂ ===== -->
+        <g class="groom"><g class="walker"><g class="lean">
+          <g class="g-leg back"><path d="M-18 -64H-4L-6 -4H-19Z" fill="url(#suitDark)"/><ellipse cx="-12" cy="-2" rx="11" ry="4.5" fill="#2a0610"/></g>
+          <g class="g-leg front"><path d="M4 -64H18L20 -4H7Z" fill="url(#silGold)"/><ellipse cx="16" cy="-2" rx="11" ry="4.5" fill="#2a0610"/></g>
+          <path d="M-16 -146Q0 -138 16 -146L32 -132Q38 -100 34 -60L-34 -60Q-38 -100 -32 -132Z" fill="url(#silGold)"/>
+          <path d="M-7 -146L0 -120L7 -146Z" fill="#fff"/>
+          <path d="M-7 -137l7 4 7-4-7-3z" fill="#7a1c30"/>
+          <circle cx="-14" cy="-122" r="4" fill="#e04a66"/>
+          <g class="g-arm"><path d="M24 -134Q38 -130 38 -112L40 -74H30L28 -110Z" fill="url(#suitDark)"/><circle cx="35" cy="-70" r="6" fill="#f6d8b8"/></g>
+          <g class="g-head">
+            <rect x="-7" y="-158" width="14" height="14" fill="#f6d8b8"/>
+            <circle cx="2" cy="-176" r="22" fill="#f6d8b8"/>
+            <path d="M-22 -176Q-24 -204 2 -201Q24 -200 25 -182Q14 -194 2 -190Q-10 -188 -13 -170Z" fill="#2a0610"/>
+            <circle class="eye-open" cx="14" cy="-178" r="2.4" fill="#2a0610"/>
+            <path class="eye-closed" d="M10 -178q4 3 8 0" stroke="#2a0610" stroke-width="2" fill="none" stroke-linecap="round"/>
+            <path d="M14 -166q4 2 7-1" stroke="#a0384d" stroke-width="2" fill="none" stroke-linecap="round"/>
+            <circle class="blush" cx="10" cy="-168" r="6" fill="url(#blush)"/>
           </g>
-        </g>
+        </g></g></g>
+
+        <!-- ===== CÔ DÂU ===== -->
+        <g class="bride"><g class="walker"><g class="lean">
+          <path class="veil" d="M8 -188Q62 -172 78 -92Q90 -30 100 0L44 0Q54 -80 16 -150Z" fill="url(#veilGrad)"/>
+          <g class="b-foot"><path d="M30 -12L54 -34" stroke="#f6d8b8" stroke-width="6" stroke-linecap="round"/><ellipse cx="58" cy="-37" rx="8" ry="4" transform="rotate(-40 58 -37)" fill="#fff" stroke="#d4a548" stroke-width="1.5"/></g>
+          <g class="dress">
+            <path d="M-12 -138Q0 -132 12 -138L18 -100Q42 -50 66 -2Q50 4 34 -2Q18 6 0 -2Q-18 6 -34 -2Q-50 4 -62 -2Q-38 -50 -18 -100Z" fill="url(#dressGrad)"/>
+            <path d="M-46 -24Q0 -12 50 -24" stroke="#e8d3ad" stroke-width="1.5" fill="none"/>
+            <path d="M-34 -50Q0 -40 36 -50" stroke="#e8d3ad" stroke-width="1.2" fill="none"/>
+          </g>
+          <path d="M-12 -138Q0 -132 12 -138L16 -104H-16Z" fill="#fff"/>
+          <path d="M-15 -104Q0 -96 16 -104" stroke="#d4a548" stroke-width="3" fill="none"/>
+          <g class="b-arm">
+            <path d="M8 -134Q20 -130 20 -114L14 -96H6L10 -112Z" fill="#f6d8b8"/>
+            <g class="bouquet"><path d="M10 -96L6 -78" stroke="#4f7a3a" stroke-width="3"/>
+              <circle cx="4" cy="-100" r="8" fill="#e04a66"/><circle cx="14" cy="-104" r="7" fill="#f7c6cf"/><circle cx="8" cy="-110" r="6" fill="#ff8fa3"/><circle cx="-2" cy="-108" r="5" fill="#fff"/></g>
+          </g>
+          <g class="b-head">
+            <rect x="-6" y="-150" width="12" height="13" fill="#fbe3cc"/>
+            <circle cx="-2" cy="-166" r="19" fill="#fbe3cc"/>
+            <path d="M-20 -168Q-22 -190 0 -188Q20 -188 18 -164Q24 -150 14 -142Q12 -160 4 -170Q-6 -178 -20 -168Z" fill="#2a0610"/>
+            <circle cx="16" cy="-180" r="8" fill="#2a0610"/>
+            <path d="M-12 -186l4-7 4 6 4-7 4 7" stroke="#f7e3a8" stroke-width="2" fill="none" stroke-linejoin="round"/>
+            <circle class="eye-open" cx="-12" cy="-168" r="2.2" fill="#2a0610"/>
+            <path class="eye-closed" d="M-16 -168q4 3 8 0" stroke="#2a0610" stroke-width="2" fill="none" stroke-linecap="round"/>
+            <path d="M-14 -158q-3 2-6 0" stroke="#d6455f" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+            <circle class="blush" cx="-8" cy="-160" r="5.5" fill="url(#blush)"/>
+          </g>
+        </g></g></g>
+
         <!-- Tim bay lên khi hôn -->
         <g class="kiss-hearts" transform="translate(0 -196)">
-          <path d="M0 6 C-10 -4 -4 -12 0 -6 C4 -12 10 -4 0 6Z" fill="#e04a66" style="--dx:-30px;--d:0s"/>
-          <path d="M0 6 C-10 -4 -4 -12 0 -6 C4 -12 10 -4 0 6Z" fill="#f7c6cf" style="--dx:24px;--d:.25s"/>
-          <path d="M0 6 C-10 -4 -4 -12 0 -6 C4 -12 10 -4 0 6Z" fill="#d4a548" style="--dx:-6px;--d:.5s"/>
-          <path d="M0 6 C-10 -4 -4 -12 0 -6 C4 -12 10 -4 0 6Z" fill="#ff8fa3" style="--dx:40px;--d:.75s"/>
-          <path d="M0 6 C-10 -4 -4 -12 0 -6 C4 -12 10 -4 0 6Z" fill="#fff1c4" style="--dx:-44px;--d:1s"/>
+          <path d="M0 6C-10-4-4-12 0-6C4-12 10-4 0 6Z" fill="#e04a66" style="--dx:-34px;--d:0s"/>
+          <path d="M0 6C-10-4-4-12 0-6C4-12 10-4 0 6Z" fill="#f7c6cf" style="--dx:26px;--d:.2s"/>
+          <path d="M0 6C-10-4-4-12 0-6C4-12 10-4 0 6Z" fill="#d4a548" style="--dx:-6px;--d:.4s"/>
+          <path d="M0 6C-10-4-4-12 0-6C4-12 10-4 0 6Z" fill="#ff8fa3" style="--dx:44px;--d:.6s"/>
+          <path d="M0 6C-10-4-4-12 0-6C4-12 10-4 0 6Z" fill="#fff1c4" style="--dx:-48px;--d:.8s"/>
+          <path d="M0 6C-10-4-4-12 0-6C4-12 10-4 0 6Z" fill="#e04a66" style="--dx:12px;--d:1s"/>
         </g>
       </svg>
       <p class="kiss-caption script gold-text">Mãi mãi bên nhau</p>
@@ -258,7 +300,7 @@
 
   <div id="toast" class="toast"></div>
 
-  <script src="config.js?v=4"></script>
-  <script src="script.js?v=4"></script>
+  <script src="config.js?v=5"></script>
+  <script src="script.js?v=5"></script>
 </body>
 </html>

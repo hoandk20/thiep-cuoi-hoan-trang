@@ -68,19 +68,64 @@ a{color:inherit}
 .kiss-glow{position:absolute;width:min(560px,100vw);aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,rgba(247,227,168,.35),rgba(212,165,72,.08) 45%,transparent 70%);animation:glowPulse 2.4s ease-in-out infinite}
 @keyframes glowPulse{50%{transform:scale(1.12);opacity:.8}}
 .kiss-svg{position:relative;width:min(520px,94vw);height:auto;overflow:visible}
-.kiss-svg .groom{transform:translateX(-170px);opacity:0;transition:transform 1.3s cubic-bezier(.25,.8,.3,1) 1s,opacity .6s 1s}
-.kiss-svg .bride{transform:translateX(170px);opacity:0;transition:transform 1.3s cubic-bezier(.25,.8,.3,1) 1s,opacity .6s 1s}
-#opening.kiss .groom{transform:translateX(-30px);opacity:1}
-#opening.kiss .bride{transform:translateX(30px);opacity:1}
-.kiss-svg .lean{transform-box:fill-box;transform-origin:50% 100%;transition:transform .7s ease-in-out 2.2s}
-#opening.kiss .groom .lean{transform:rotate(4deg)}
-#opening.kiss .bride .lean{transform:rotate(-4deg)}
-.kiss-svg .veil{transform-box:fill-box;transform-origin:0 0;animation:veil 3s ease-in-out infinite}
-@keyframes veil{50%{transform:skewX(-6deg) scaleX(1.06)}}
-.kiss-hearts path{opacity:0}
-#opening.kiss .kiss-hearts path{animation:rise 1.8s ease-out calc(var(--d) + 2.6s) 2 both}
-@keyframes rise{0%{opacity:0;transform:translate(0,0) scale(.4)}20%{opacity:1}100%{opacity:0;transform:translate(var(--dx),-130px) scale(1.8)}}
-.kiss-caption{position:relative;font-size:clamp(2.4rem,9vw,3.6rem);margin-top:6px;opacity:0;transform:translateY(16px);transition:opacity 1s 2.8s,transform 1s 2.8s}
+/* --- Diễn hoạt: 0.9s bước vào · 2.5s dừng nhìn nhau · 3.1s tiến lại hôn · 3.6s tim · 4.3s tung hoa --- */
+.kiss-svg *{transform-box:fill-box}
+.kiss-svg .groom{transform:translateX(-230px);opacity:0}
+.kiss-svg .bride{transform:translateX(230px);opacity:0}
+#opening.kiss .groom{animation:gIn 2.7s cubic-bezier(.3,.6,.3,1) .9s both}
+#opening.kiss .bride{animation:bIn 2.7s cubic-bezier(.3,.6,.3,1) .9s both}
+@keyframes gIn{0%{transform:translateX(-230px);opacity:0}10%{opacity:1}60%{transform:translateX(-58px);opacity:1}80%{transform:translateX(-58px)}100%{transform:translateX(-34px);opacity:1}}
+@keyframes bIn{0%{transform:translateX(230px);opacity:0}10%{opacity:1}60%{transform:translateX(58px);opacity:1}80%{transform:translateX(58px)}100%{transform:translateX(34px);opacity:1}}
+/* nhịp bước */
+#opening.kiss .walker{animation:bob .4s ease-in-out .9s 4}
+@keyframes bob{50%{transform:translateY(-6px)}}
+.g-leg{transform-origin:50% 0}
+#opening.kiss .g-leg.front{animation:swing .8s ease-in-out .9s 2}
+#opening.kiss .g-leg.back{animation:swing .8s ease-in-out .9s 2 reverse}
+@keyframes swing{25%{transform:rotate(-20deg)}75%{transform:rotate(20deg)}}
+.dress{transform-origin:50% 0;animation:sway 1.6s ease-in-out infinite}
+@keyframes sway{50%{transform:skewX(-3deg)}}
+.veil{transform-origin:0 0;animation:veil 2.2s ease-in-out infinite}
+@keyframes veil{50%{transform:skewX(-8deg) scaleX(1.08)}}
+/* dừng lại nhìn nhau: chú rể gật đầu, cô dâu nghiêng đầu e thẹn */
+.g-head,.b-head{transform-origin:50% 100%}
+#opening.kiss .g-head{animation:nod .6s ease-in-out 2.5s both}
+#opening.kiss .b-head{animation:shy .7s ease-in-out 2.5s both}
+@keyframes nod{50%{transform:rotate(6deg)}}
+@keyframes shy{50%{transform:rotate(-8deg)}}
+/* hôn: nghiêng người, ôm eo, nhón chân, hất chân, nhắm mắt, má hồng */
+.lean{transform-origin:50% 100%}
+#opening.kiss .groom .lean{animation:leanG .6s ease-in-out 3.05s both}
+#opening.kiss .bride .lean{animation:leanB .6s ease-in-out 3.05s both}
+@keyframes leanG{to{transform:rotate(4deg)}}
+@keyframes leanB{to{transform:rotate(-4deg) translateY(-4px)}}
+.g-arm{transform-origin:50% 0}
+#opening.kiss .g-arm{animation:hug .6s ease-in-out 3s both}
+@keyframes hug{to{transform:rotate(-45deg)}}
+.b-foot{transform-origin:0 100%;opacity:0}
+#opening.kiss .b-foot{animation:pop .5s cubic-bezier(.3,1.6,.5,1) 3.45s both}
+@keyframes pop{from{opacity:0;transform:rotate(50deg)}to{opacity:1;transform:rotate(0)}}
+.eye-closed,.blush{opacity:0}
+#opening.kiss .eye-open{animation:fadeOut .2s 3.4s both}
+#opening.kiss .eye-closed{animation:fadeIn .2s 3.4s both}
+#opening.kiss .blush{animation:fadeIn .5s 3.5s both}
+@keyframes fadeOut{to{opacity:0}}
+@keyframes fadeIn{to{opacity:1}}
+/* cô dâu giơ bó hoa lên ăn mừng */
+.b-arm{transform-origin:50% 0}
+#opening.kiss .b-arm{animation:cheer .7s cubic-bezier(.3,1.4,.5,1) 4.4s both}
+@keyframes cheer{to{transform:rotate(-150deg) translate(-4px,4px)}}
+/* trái tim vàng tự vẽ + lấp lánh */
+.big-heart{fill:none;stroke:url(#silGold);stroke-width:3;stroke-dasharray:1;stroke-dashoffset:1;filter:drop-shadow(0 0 6px rgba(247,227,168,.7))}
+#opening.kiss .big-heart{animation:draw 1.4s ease-in-out 3.5s forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.twinkles path{fill:#fff1c4;opacity:0;transform-origin:50% 50%}
+#opening.kiss .twinkles path{animation:twinkle 1.2s ease-in-out calc(var(--d) + 4.2s) infinite}
+@keyframes twinkle{0%,100%{opacity:0;transform:scale(.3) rotate(0)}50%{opacity:1;transform:scale(1.2) rotate(45deg)}}
+.kiss-hearts path{opacity:0;transform-origin:50% 50%}
+#opening.kiss .kiss-hearts path{animation:rise 1.8s ease-out calc(var(--d) + 3.5s) 2 both}
+@keyframes rise{0%{opacity:0;transform:translate(0,0) scale(.4)}20%{opacity:1}100%{opacity:0;transform:translate(var(--dx),-140px) scale(1.9)}}
+.kiss-caption{position:relative;font-size:clamp(2.4rem,9vw,3.6rem);margin-top:6px;opacity:0;transform:translateY(16px);transition:opacity 1s 4.1s,transform 1s 4.1s}
 #opening.kiss .kiss-caption{opacity:1;transform:none}
 .corner{position:absolute;width:56px;height:56px;pointer-events:none}
 .corner.tl{top:8px;left:8px}.corner.tr{top:8px;right:8px;transform:scaleX(-1)}

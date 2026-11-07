@@ -136,13 +136,13 @@
     if (opened) return; opened = true;
     userPaused = false; tryPlay();              // nhạc chạy ngay khi chạm phong bì
     op.classList.add('kiss');                   // nắp phong bì mở, hiện cảnh hôn nhau
-    setTimeout(() => explodeAt(.5, .38), 2000); // tim nổ đúng lúc hôn
+    setTimeout(() => explodeAt(.5, .36), 3500); // tim nổ đúng lúc hôn
     setTimeout(() => {
       op.classList.add('open');                 // 2 cánh cổng mở
       fireworks();
       document.body.classList.remove('locked');
-    }, 4200);
-    setTimeout(() => op.classList.add('gone'), 6600);
+    }, 6300);
+    setTimeout(() => op.classList.add('gone'), 8700);
   }
   env.addEventListener('click', openCard);
   env.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openCard(); } });
