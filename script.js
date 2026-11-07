@@ -43,7 +43,7 @@
      Có toạ độ (mapCoords: "21.0285,105.8542") → hiện bản đồ Google thật.
      Chưa có → bản đồ minh hoạ có ghim, bấm vào mở Google Maps. */
   function miniMap(e) {
-    const isBride = /gái/i.test(e.side);
+    const isBride = e.side === 'bride';
     const label = isBride ? 'Nhà Gái' : 'Nhà Trai';
     const coords = W.mapCoords && W.mapCoords[isBride ? 'bride' : 'groom'];
     if (coords) {
@@ -77,23 +77,23 @@
       <span class="map-chip">🗺️ Chạm để mở bản đồ</span></a>`;
   }
 
-  /* ---- Events grouped by day ---- */
-  $('#eventDays').innerHTML = W.events.map(day => `
-    <div class="ev-day">
-      <p class="ev-day-label reveal">${esc(day.dayLabel)}</p>
-      <div class="event-grid">
-        ${day.items.map(e => `
-        <article class="event-card reveal">
-          <div class="event-icon">${e.icon || '💍'}</div>
-          <h3 class="gold-text">${esc(e.title)}</h3>
-          <p class="event-side">${esc(e.side)}</p>
-          <p class="event-time">${esc(e.time)}</p>
-          <p class="event-addr">${esc(e.address)}</p>
-          ${miniMap(e)}
-          <a class="btn-gold" href="${esc(e.map)}" target="_blank" rel="noopener">📍 Chỉ đường</a>
-        </article>`).join('')}
-      </div>
-    </div>`).join('');
+  /* ---- Sự kiện: mỗi địa điểm 1 ô, lịch cả 2 ngày + 1 bản đồ ---- */
+  $('#eventDays').innerHTML = `<div class="event-grid venues">${W.venues.map(v => `
+    <article class="event-card venue reveal">
+      <div class="event-icon">${v.icon || '💍'}</div>
+      <h3 class="gold-text">${esc(v.name)}</h3>
+      <p class="event-side">${esc(v.address)}</p>
+      <ul class="schedule">
+        ${v.schedule.map(s => `
+        <li>
+          <span class="sc-date"><b>${esc(s.date)}</b><small>${esc(s.day)}</small></span>
+          <span class="sc-time">${esc(s.time)}</span>
+          <span class="sc-title">${esc(s.title)}</span>
+        </li>`).join('')}
+      </ul>
+      ${miniMap(v)}
+      <a class="btn-gold" href="${esc(v.map)}" target="_blank" rel="noopener">📍 Chỉ đường đến ${esc(v.name)}</a>
+    </article>`).join('')}</div>`;
 
   /* ---- Album + lightbox ---- */
   $('#masonry').innerHTML = W.album.map((src, i) =>
@@ -150,7 +150,7 @@
   $('#calBtn').href = 'https://calendar.google.com/calendar/render?action=TEMPLATE'
     + '&text=' + encodeURIComponent(`Đám cưới ${W.groom.shortName} & ${W.bride.shortName}`)
     + '&dates=20261227/20261229'
-    + '&details=' + encodeURIComponent(W.events.map(d => d.dayLabel + '\n' + d.items.map(e => `• ${e.time} ${e.title} (${e.side}): ${e.map}`).join('\n')).join('\n\n'));
+    + '&details=' + encodeURIComponent(W.venues.map(v => `${v.name}: ${v.map}\n` + v.schedule.map(s => `• ${s.day} ${s.date} – ${s.time} ${s.title}`).join('\n')).join('\n\n'));
 
   /* ---- Reveal on scroll ---- */
   const io = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } }), { threshold: .12 });
@@ -175,43 +175,53 @@
   // Trình duyệt chặn tự phát nhạc: phát ở lần chạm/click đầu tiên nếu chưa phát
   ['pointerdown', 'touchend', 'keydown'].forEach(ev => document.addEventListener(ev, () => { if (audio.paused && !userPaused) tryPlay(); }, { passive: true }));
 
-  /* ---- Opening: phong bì → cầu hôn → hôn nhau → cổng mở + pháo hoa ---- */
+  /* ---- Opening: phong bì → cầu hôn → hôn → bồ câu → xoay vòng → tung hoa → cổng mở ---- */
   const op = $('#opening'), env = $('#envelope');
-  let opened = false;
+  let opened = false, finished = false;
+  const timers = [];
+  function finish() {                           // mở cổng (tự động hoặc khi bấm "Bỏ qua")
+    if (finished) return; finished = true;
+    timers.forEach(clearTimeout);
+    op.classList.add('open');
+    fireworks();
+    document.body.classList.remove('locked');
+    setTimeout(() => op.classList.add('gone'), 2400);
+  }
   function openCard() {
     if (opened) return; opened = true;
     userPaused = false; tryPlay();              // nhạc chạy ngay khi chạm phong bì
-    op.classList.add('kiss');                   // nắp phong bì mở, hiện sân khấu
+    op.classList.add('kiss');
     coupleTimeline();
-    setTimeout(() => {
-      op.classList.add('open');                 // 2 cánh cổng mở
-      fireworks();
-      document.body.classList.remove('locked');
-    }, 7000);
-    setTimeout(() => op.classList.add('gone'), 9400);
+    timers.push(setTimeout(finish, 7900));
   }
   env.addEventListener('click', openCard);
   env.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openCard(); } });
+  $('#skipBtn').addEventListener('click', finish);
 
   /* ---- Diễn hoạt cô dâu chú rể: mỗi khung hình tính lại tư thế từ thời gian t (giây) ----
-     0.9–2.7 đi vào · 2.8–3.9 chú rể lấy hộp nhẫn, cô dâu nhảy cẫng lên
-     3.9–4.4 tiến lại gần · 4.4 hôn · 5.3 cô dâu giơ bó hoa · sau đó thở nhẹ */
+     0.9–2.7 đi vào · 2.8–3.9 cầu hôn, cô dâu mắt tim nhảy cẫng · 3.9–4.4 tiến lại · 4.4 hôn
+     4.9 bồ câu kéo băng rôn bay vào · 5.3–6.2 chú rể xoay cô dâu · 6.3–7.5 tung bó hoa */
   function coupleTimeline() {
     const svg = $('.kiss-svg');
     const q = (s) => svg.querySelector(s);
     const G = { root: q('.groom'), walk: q('.groom .walker'), lean: q('.groom .lean'), legF: q('.g-leg.front'), legB: q('.g-leg.back'),
       arm: q('.g-arm'), head: q('.g-head'), box: q('.ringbox'), lid: q('.ringbox .lid'), eyeO: q('.g-head .eye-open'), eyeC: q('.g-head .eye-closed'), blush: q('.g-head .blush') };
-    const B = { root: q('.bride'), walk: q('.bride .walker'), lean: q('.bride .lean'), arm: q('.b-arm'), head: q('.b-head'), foot: q('.b-foot'),
-      eyeO: q('.b-head .eye-open'), eyeC: q('.b-head .eye-closed'), blush: q('.b-head .blush') };
+    const B = { root: q('.bride'), walk: q('.bride .walker'), lean: q('.bride .lean'), arm: q('.b-arm'), bouquet: q('.b-arm .bouquet'), head: q('.b-head'), foot: q('.b-foot'),
+      eyeO: q('.b-head .eye-open'), eyeC: q('.b-head .eye-closed'), eyeH: q('.b-head .eye-heart'), blush: q('.b-head .blush') };
+    const doves = q('.doves'), wings = [...svg.querySelectorAll('.doves .wing')];
+    const fly = B.bouquet.cloneNode(true); fly.style.opacity = 0; svg.appendChild(fly);
+    let flyFrom = null;
     const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
     const seg = (t, a, b) => clamp((t - a) / (b - a));
     const inOut = p => p < .5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
     const outQuad = p => 1 - (1 - p) * (1 - p);
+    const outCubic = p => 1 - Math.pow(1 - p, 3);
     const outBack = p => { const c = 1.70158; return 1 + (c + 1) * Math.pow(p - 1, 3) + c * Math.pow(p - 1, 2); };
     const bump = p => Math.sin(Math.PI * clamp(p));          // 0 → 1 → 0 mượt
     const set = (el, v) => el && el.setAttribute('transform', v);
     const op_ = (el, v) => el && (el.style.opacity = v);
     const screenOf = (el) => { const r = el.getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2]; };
+    const toSvg = (x, y) => { const p = svg.createSVGPoint(); p.x = x; p.y = y; return p.matrixTransform(svg.getScreenCTM().inverse()); };
     const fired = {};
     const once = (k, t, at, fn) => { if (t >= at && !fired[k]) { fired[k] = 1; fn(); } };
     const t0 = performance.now();
@@ -223,47 +233,72 @@
       const pa = seg(t, 3.9, 4.4), appD = 36 * inOut(pa);
       const amp = (pw > 0 && pw < 1 ? Math.pow(1 - pw, .7) : 0) + .45 * bump(pa);
       const phase = (walkD + appD) / 44 * Math.PI * 2;
-      const gx = -240 + walkD + appD, bx = 240 - walkD - appD;
+      const tw = seg(t, 5.3, 6.2), twE = inOut(tw);           // xoay vòng
+      const gx = -240 + walkD + appD, bx = 240 - walkD - appD + 20 * bump(tw);
       const vis = clamp((t - .9) / .35);
       op_(G.root, vis); op_(B.root, vis);
       set(G.root, `translate(${gx} 0)`); set(B.root, `translate(${bx} 0)`);
-      // nhún theo bước; cô dâu nhảy cẫng 2 lần khi thấy nhẫn
-      const hop = 16 * Math.abs(Math.sin(2 * Math.PI * seg(t, 3.15, 3.85))) * (t > 3.15 && t < 3.85 ? 1 : 0);
+      // nhún theo bước; cô dâu nhảy cẫng 2 lần khi thấy nhẫn, nhún nhẹ khi xoay
+      const hop = (t > 3.15 && t < 3.85 ? 16 * Math.abs(Math.sin(2 * Math.PI * seg(t, 3.15, 3.85))) : 0) + 6 * bump(tw);
       set(G.walk, `translate(0 ${-4 * amp * Math.abs(Math.sin(phase))})`);
       set(B.walk, `translate(0 ${-2.5 * amp * Math.abs(Math.sin(phase)) - hop})`);
-      // chân & tay đánh theo nhịp
       set(G.legF, `rotate(${18 * amp * Math.sin(phase)} 11 -64)`);
       set(G.legB, `rotate(${-18 * amp * Math.sin(phase)} -11 -64)`);
-      // tay chú rể: đánh khi đi → đưa hộp nhẫn → hạ xuống → ôm eo
+      // tay chú rể: đánh khi đi → đưa hộp nhẫn → ôm eo → giơ cao nắm tay xoay cô dâu
       const offer = inOut(seg(t, 2.8, 3.2)) - inOut(seg(t, 3.75, 4.05));
       const hug = inOut(seg(t, 4.05, 4.5));
-      const armA = -12 * amp * Math.sin(phase) - 75 * offer - 45 * hug;
+      const armA = -12 * amp * Math.sin(phase) - 75 * offer - 45 * hug - 105 * bump(tw);
       set(G.arm, `rotate(${armA} 31 -130)`);
-      // hộp nhẫn luôn đứng thẳng, nắp bật mở
       op_(G.box, clamp(seg(t, 2.85, 3.0) - seg(t, 3.75, 3.95)));
       set(G.box, `rotate(${-armA} 35 -69) translate(35 -69) scale(${1.6 * (.6 + .4 * outBack(seg(t, 2.85, 3.1)))}) translate(-35 69)`);
       set(G.lid, `rotate(${-110 * outBack(seg(t, 3.05, 3.35))} 27 -71)`);
-      // đầu: chú rể gật, cô dâu nghiêng đầu e thẹn
       set(G.head, `rotate(${6 * bump(seg(t, 2.6, 3.2))} 0 -150)`);
       set(B.head, `rotate(${-9 * bump(seg(t, 3.2, 3.9))} -2 -148)`);
-      // nghiêng người hôn + thở nhẹ sau đó
-      const lean = inOut(seg(t, 4.0, 4.45)), breathe = t > 4.6 ? Math.sin((t - 4.6) * 2.4) * .7 : 0;
+      // nghiêng người hôn, tách nhẹ khi xoay, thở nhẹ
+      const lean = inOut(seg(t, 4.0, 4.45)) * (1 - .8 * bump(tw)), breathe = t > 4.6 ? Math.sin((t - 4.6) * 2.4) * .7 : 0;
       set(G.lean, `rotate(${4 * lean + breathe} 0 0)`);
-      set(B.lean, `translate(0 ${-4 * lean}) rotate(${-4 * lean - breathe} 0 0)`);
-      // tay cô dâu: giơ hoa bất ngờ khi nhảy → giơ cao ăn mừng sau nụ hôn
-      const surprise = -40 * bump(seg(t, 3.1, 3.9)), cheer = -150 * outBack(seg(t, 5.3, 6.0));
-      set(B.arm, `rotate(${surprise + cheer + (t > 6 ? Math.sin((t - 6) * 4) * 6 : 0)} 10 -133)`);
-      // hất chân sau, nhắm mắt, má hồng
+      const spin = Math.cos(2 * Math.PI * twE), flare = 1 + .18 * bump(tw);
+      set(B.lean, `translate(0 ${-4 * lean}) rotate(${-4 * lean - breathe} 0 0) scale(${spin * flare} 1)`);
+      // tay cô dâu: giơ hoa bất ngờ → lấy đà → tung hoa → hạ tay
+      const surprise = -40 * bump(seg(t, 3.1, 3.9));
+      const windup = 35 * bump(seg(t, 6.15, 6.45));
+      const toss = -165 * (outBack(seg(t, 6.45, 6.75)) - inOut(seg(t, 7.0, 7.5)));
+      set(B.arm, `rotate(${surprise + windup + toss} 10 -133)`);
+      // tung bó hoa: tách khỏi tay, bay vút lên xoay tròn
+      once('release', t, 6.65, () => {
+        const [x, y] = screenOf(B.bouquet); flyFrom = toSvg(x, y);
+        B.bouquet.style.opacity = 0; fly.style.opacity = 1;
+      });
+      if (flyFrom) {
+        const p = seg(t, 6.65, 7.6);
+        set(fly, `translate(${flyFrom.x + 70 * p} ${flyFrom.y - 360 * outCubic(p)}) rotate(${600 * p}) scale(${1.3 + .4 * p}) translate(-8 104)`);
+        fly.style.opacity = 1 - seg(t, 7.35, 7.6);
+      }
+      once('catch', t, 7.45, () => { const [x, y] = screenOf(fly); burstAt(x, y, 40, pals[0], .7); });
+      // mắt: tim khi thấy nhẫn → nhắm khi hôn → mở khi xoay
+      const heart = seg(t, 3.25, 3.35) - seg(t, 4.1, 4.2);
+      const closed = seg(t, 4.35, 4.5) - seg(t, 5.2, 5.3);
+      op_(B.eyeH, heart);
+      set(B.eyeH, `translate(-12 -168) scale(${1.25 + .3 * Math.abs(Math.sin(t * 9))}) translate(12 168)`);
+      op_(B.eyeO, (1 - closed) * (1 - heart)); op_(B.eyeC, closed);
+      op_(G.eyeO, 1 - closed); op_(G.eyeC, closed);
+      op_(G.blush, seg(t, 4.45, 5)); op_(B.blush, Math.max(seg(t, 4.45, 5), heart * .8));
+      // hất chân sau khi hôn (ẩn khi xoay)
       const fp = seg(t, 4.45, 5.0);
-      op_(B.foot, clamp(fp * 3)); set(B.foot, `rotate(${50 * (1 - outBack(fp))} 30 -12)`);
-      const kiss = seg(t, 4.35, 4.5);
-      [G, B].forEach(P => { op_(P.eyeO, 1 - kiss); op_(P.eyeC, kiss); op_(P.blush, seg(t, 4.45, 5)); });
-      // hiệu ứng hạt: nhẫn lấp lánh, tim vui trên đầu cô dâu, tim nổ khi hôn
+      op_(B.foot, clamp(fp * 3) * (1 - seg(t, 5.2, 5.35))); set(B.foot, `rotate(${50 * (1 - outBack(fp))} 30 -12)`);
+      // đôi bồ câu kéo băng rôn bay vào, lượn nhẹ, vỗ cánh
+      const dp = outCubic(seg(t, 4.9, 6.1));
+      op_(doves, seg(t, 4.9, 5.1));
+      set(doves, `translate(${-430 * (1 - dp)} ${-296 + 5 * Math.sin(t * 3) - 40 * (1 - dp)})`);
+      const flap = Math.sin(t * (dp < 1 ? 18 : 11));
+      wings.forEach((w, i) => set(w, `rotate(${(i % 2 ? 22 : -22) * flap} -2 -2)`));
+      // hạt: nhẫn lấp lánh, tim vui trên đầu cô dâu, tim nổ khi hôn, sao khi xoay
       once('ring', t, 3.25, () => { const [x, y] = screenOf(q('.ringbox .ring')); burstAt(x, y, 26, pals[0], .5); });
       once('joy1', t, 3.3, () => { const [x, y] = screenOf(B.head); burstAt(x, y - 30, 14, pals[1], .45); });
       once('joy2', t, 3.65, () => { const [x, y] = screenOf(B.head); burstAt(x, y - 30, 14, pals[3], .45); });
       once('kiss', t, 4.5, () => { const [x1, y1] = screenOf(G.head), [x2, y2] = screenOf(B.head); burstAt((x1 + x2) / 2, Math.min(y1, y2) - 10, 60, pals[1], 1); });
-      if (t < 9.5) requestAnimationFrame(frame);
+      once('twirl', t, 5.75, () => { const [x, y] = screenOf(B.walk); burstAt(x, y + 40, 30, pals[2], .6); });
+      if (t < 10.5) requestAnimationFrame(frame);
     }
     requestAnimationFrame(frame);
   }

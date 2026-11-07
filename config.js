@@ -35,24 +35,25 @@ window.WEDDING = {
   footerPhoto: "images/album-08.jpg", // ảnh nền cuối trang
   quote: "Hai trái tim, một nhịp đập — từ hôm nay, chúng ta là một nhà.",
 
-  // Sự kiện — chia theo ngày. Sửa giờ / tên lễ cho đúng thực tế.
-  events: [
+  // Sự kiện — gộp theo địa điểm: mỗi nhà 1 ô, 1 bản đồ chỉ đường.
+  // Sửa giờ / tên lễ cho đúng thực tế; thêm/bớt dòng trong "schedule" tuỳ ý.
+  venues: [
     {
-      dayLabel: "Chủ Nhật · 27 tháng 12 năm 2026",
-      items: [
-        { title: "Tiệc Mừng Vu Quy", side: "Tại Nhà Gái", time: "11:00", address: "Tư gia nhà gái",
-          map: "https://maps.app.goo.gl/mYDa8UV86XMmxG7z8", icon: "🥂" },
-        { title: "Tiệc Mừng Thành Hôn", side: "Tại Nhà Trai", time: "11:00", address: "Tư gia nhà trai",
-          map: "https://maps.app.goo.gl/q8WVG9ErECqNRzEM6", icon: "🥂" }
+      name: "Nhà Trai", side: "groom", icon: "💍",
+      address: "Tư gia nhà trai",
+      map: "https://maps.app.goo.gl/q8WVG9ErECqNRzEM6",
+      schedule: [
+        { day: "Chủ Nhật", date: "27/12", time: "11:00", title: "Tiệc Mừng Thành Hôn" },
+        { day: "Thứ Hai", date: "28/12", time: "10:00", title: "Lễ Thành Hôn" }
       ]
     },
     {
-      dayLabel: "Thứ Hai · 28 tháng 12 năm 2026",
-      items: [
-        { title: "Lễ Vu Quy", side: "Tại Nhà Gái", time: "08:00", address: "Tư gia nhà gái",
-          map: "https://maps.app.goo.gl/mYDa8UV86XMmxG7z8", icon: "🌸" },
-        { title: "Lễ Thành Hôn", side: "Tại Nhà Trai", time: "10:00", address: "Tư gia nhà trai",
-          map: "https://maps.app.goo.gl/q8WVG9ErECqNRzEM6", icon: "💍" }
+      name: "Nhà Gái", side: "bride", icon: "🌸",
+      address: "Tư gia nhà gái",
+      map: "https://maps.app.goo.gl/mYDa8UV86XMmxG7z8",
+      schedule: [
+        { day: "Chủ Nhật", date: "27/12", time: "11:00", title: "Tiệc Mừng Vu Quy" },
+        { day: "Thứ Hai", date: "28/12", time: "08:00", title: "Lễ Vu Quy" }
       ]
     }
   ],

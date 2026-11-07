@@ -12,7 +12,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Be+Vietnam+Pro:wght@300;400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=10">
+  <link rel="stylesheet" href="style.css?v=12">
 </head>
 <body class="locked">
 
@@ -151,10 +151,36 @@
             <path d="M-12 -186l4-7 4 6 4-7 4 7" stroke="#f7e3a8" stroke-width="2" fill="none" stroke-linejoin="round"/>
             <circle class="eye-open" cx="-12" cy="-168" r="2.2" fill="#2a0610"/>
             <path class="eye-closed" d="M-16 -168q4 3 8 0" stroke="#2a0610" stroke-width="2" fill="none" stroke-linecap="round"/>
+            <path class="eye-heart" d="M-12 -164c-4.5-3.2-5.5-6.3-3-7.8c1.4-.8 2.6 0 3 1c.4-1 1.6-1.8 3-1c2.5 1.5 1.5 4.6-3 7.8z" fill="#e04a66" opacity="0"/>
             <path d="M-14 -158q-3 2-6 0" stroke="#d6455f" stroke-width="2.4" fill="none" stroke-linecap="round"/>
             <circle class="blush" cx="-8" cy="-160" r="5.5" fill="url(#blush)"/>
           </g>
         </g></g></g>
+
+        <!-- Đôi bồ câu kéo băng rôn -->
+        <g class="doves" opacity="0">
+          <path d="M-62 4L-50 24M62 4L50 24" stroke="#f2d58a" stroke-width="1.2"/>
+          <path d="M-76 20H76L67 32L76 44H-76L-67 32Z" fill="#7a1c30" stroke="#f2d58a" stroke-width="1.5"/>
+          <text x="0" y="39" text-anchor="middle" font-family="Great Vibes,cursive" font-size="19" fill="#f7e3a8">Hoàn ❤ Trang</text>
+          <g transform="translate(-70 0)"><g class="dove-body">
+              <path class="wing back" d="M-2 -2Q-10 -20 -24 -18Q-15 -6 -6 2Z" fill="#e6ddcc"/>
+              <path d="M-11 0L-23 -6L-21 5Z" fill="#fff"/>
+              <ellipse cx="0" cy="0" rx="13" ry="7" fill="#fff"/>
+              <circle cx="11" cy="-4" r="5.2" fill="#fff"/>
+              <path d="M15.5 -5.2L21 -3.6L15.5 -2.4Z" fill="#e2b45a"/>
+              <circle cx="12.8" cy="-5.2" r="1.1" fill="#2a0610"/>
+              <path class="wing front" d="M-2 -2Q-6 -22 -19 -24Q-12 -8 -4 2Z" fill="#fff" stroke="#e6ddcc" stroke-width="1"/>
+            </g></g>
+          <g transform="translate(70 0) scale(-1 1)"><g class="dove-body">
+              <path class="wing back" d="M-2 -2Q-10 -20 -24 -18Q-15 -6 -6 2Z" fill="#e6ddcc"/>
+              <path d="M-11 0L-23 -6L-21 5Z" fill="#fff"/>
+              <ellipse cx="0" cy="0" rx="13" ry="7" fill="#fff"/>
+              <circle cx="11" cy="-4" r="5.2" fill="#fff"/>
+              <path d="M15.5 -5.2L21 -3.6L15.5 -2.4Z" fill="#e2b45a"/>
+              <circle cx="12.8" cy="-5.2" r="1.1" fill="#2a0610"/>
+              <path class="wing front" d="M-2 -2Q-6 -22 -19 -24Q-12 -8 -4 2Z" fill="#fff" stroke="#e6ddcc" stroke-width="1"/>
+            </g></g>
+        </g>
 
         <!-- Tim bay lên khi hôn -->
         <g class="kiss-hearts" transform="translate(0 -196)">
@@ -168,6 +194,7 @@
       </svg>
       <p class="kiss-caption script gold-text">Mãi mãi bên nhau</p>
     </div>
+    <button class="skip-btn" id="skipBtn" type="button">Bỏ qua ›</button>
   </div>
 
   <canvas id="fx"></canvas>
@@ -311,7 +338,7 @@
 
   <div id="toast" class="toast"></div>
 
-  <script src="config.js?v=10"></script>
-  <script src="script.js?v=10"></script>
+  <script src="config.js?v=12"></script>
+  <script src="script.js?v=12"></script>
 </body>
 </html>
