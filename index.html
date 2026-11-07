@@ -12,7 +12,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Be+Vietnam+Pro:wght@300;400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=3">
+  <link rel="stylesheet" href="style.css?v=4">
 </head>
 <body class="locked">
 
@@ -49,15 +49,69 @@
   <div id="opening">
     <div class="door left"><div class="door-inner"><span class="door-xi">囍</span></div></div>
     <div class="door right"><div class="door-inner"><span class="door-xi">囍</span></div></div>
-    <div class="gate-card">
-      <svg class="corner tl"><use href="#corner"/></svg><svg class="corner tr"><use href="#corner"/></svg>
+    <!-- Phong bì thư: bấm vào bất kỳ đâu trên phong bì để mở -->
+    <div class="gate-card envelope" id="envelope" role="button" tabindex="0" aria-label="Mở thiệp">
+      <div class="env-flap"><div class="env-flap-in"></div></div>
+      <div class="env-seal">囍</div>
       <svg class="corner bl"><use href="#corner"/></svg><svg class="corner br"><use href="#corner"/></svg>
       <p class="env-small">Trân trọng kính mời</p>
       <h1 class="script gold-text env-names"><span data-k="groom.shortName"></span><br><span class="amp">&</span> <span data-k="bride.shortName"></span></h1>
       <svg class="flourish"><use href="#flourish"/></svg>
       <p class="env-date" data-k="dateText"></p>
-      <button id="openBtn" class="btn-gold">Mở thiệp</button>
-      <p class="env-hint">Bật âm thanh để trọn vẹn cảm xúc ♫</p>
+      <span id="openBtn" class="btn-gold">Mở thiệp ✉</span>
+      <p class="env-hint">Chạm vào phong bì để mở · bật âm thanh ♫</p>
+    </div>
+
+    <!-- Hoạt ảnh cô dâu chú rể hôn nhau -->
+    <div class="kiss-scene" aria-hidden="true">
+      <div class="kiss-glow"></div>
+      <svg class="kiss-svg" viewBox="-200 -260 400 280">
+        <defs>
+          <linearGradient id="silGold" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#fff1c4"/><stop offset=".5" stop-color="#e2b45a"/><stop offset="1" stop-color="#a8792a"/>
+          </linearGradient>
+          <linearGradient id="veilGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#fff" stop-opacity=".85"/><stop offset="1" stop-color="#fff" stop-opacity=".15"/>
+          </linearGradient>
+        </defs>
+        <ellipse cx="0" cy="2" rx="150" ry="8" fill="#000" opacity=".25"/>
+        <!-- Chú rể (nhìn sang phải) -->
+        <g class="groom">
+          <g class="lean">
+            <path d="M-16 -146 Q0 -138 16 -146 L34 -132 Q40 -100 36 -62 L22 -62 L20 0 L4 0 L0 -54 L-4 0 L-20 0 L-22 -62 L-36 -62 Q-40 -100 -34 -132 Z" fill="url(#silGold)"/>
+            <path d="M-6 -146 L0 -124 L6 -146 Z" fill="#3d0a16"/>
+            <path d="M-6 -136 l6 4 l6 -4 l-6 -3 z" fill="#7a1c30"/>
+            <path d="M30 -128 Q52 -112 58 -92 L50 -88 Q42 -104 26 -112 Z" fill="url(#silGold)"/>
+            <rect x="-8" y="-158" width="16" height="14" fill="url(#silGold)"/>
+            <circle cx="2" cy="-176" r="22" fill="url(#silGold)"/>
+            <path d="M-22 -178 Q-22 -202 2 -200 Q22 -200 24 -184 Q14 -194 0 -190 Q-12 -188 -14 -172 Z" fill="#3d0a16"/>
+          </g>
+        </g>
+        <!-- Cô dâu (nhìn sang trái) -->
+        <g class="bride">
+          <g class="lean">
+            <path class="veil" d="M10 -186 Q60 -170 74 -90 Q86 -30 96 0 L40 0 Q50 -80 18 -150 Z" fill="url(#veilGrad)"/>
+            <path d="M-12 -138 Q0 -132 12 -138 L18 -100 Q40 -50 64 0 L-60 0 Q-38 -50 -18 -100 Z" fill="#fffaf0"/>
+            <path d="M-12 -138 Q0 -132 12 -138 L16 -104 L-16 -104 Z" fill="#f5e6cf"/>
+            <path d="M-14 -104 Q0 -96 16 -104" stroke="#d4a548" stroke-width="3" fill="none"/>
+            <rect x="-6" y="-150" width="12" height="13" fill="#fdebd3"/>
+            <circle cx="-2" cy="-166" r="19" fill="#fdebd3"/>
+            <path d="M-20 -168 Q-22 -190 0 -188 Q20 -188 18 -164 Q24 -150 14 -142 Q12 -160 4 -170 Q-6 -178 -20 -168 Z" fill="#3d0a16"/>
+            <circle cx="16" cy="-180" r="8" fill="#3d0a16"/>
+            <circle cx="10" cy="-186" r="3" fill="#f7e3a8"/>
+            <g class="bouquet"><circle cx="-26" cy="-96" r="9" fill="#e04a66"/><circle cx="-18" cy="-102" r="7" fill="#f7c6cf"/><circle cx="-32" cy="-104" r="6" fill="#f2a7b5"/></g>
+          </g>
+        </g>
+        <!-- Tim bay lên khi hôn -->
+        <g class="kiss-hearts" transform="translate(0 -196)">
+          <path d="M0 6 C-10 -4 -4 -12 0 -6 C4 -12 10 -4 0 6Z" fill="#e04a66" style="--dx:-30px;--d:0s"/>
+          <path d="M0 6 C-10 -4 -4 -12 0 -6 C4 -12 10 -4 0 6Z" fill="#f7c6cf" style="--dx:24px;--d:.25s"/>
+          <path d="M0 6 C-10 -4 -4 -12 0 -6 C4 -12 10 -4 0 6Z" fill="#d4a548" style="--dx:-6px;--d:.5s"/>
+          <path d="M0 6 C-10 -4 -4 -12 0 -6 C4 -12 10 -4 0 6Z" fill="#ff8fa3" style="--dx:40px;--d:.75s"/>
+          <path d="M0 6 C-10 -4 -4 -12 0 -6 C4 -12 10 -4 0 6Z" fill="#fff1c4" style="--dx:-44px;--d:1s"/>
+        </g>
+      </svg>
+      <p class="kiss-caption script gold-text">Mãi mãi bên nhau</p>
     </div>
   </div>
 
@@ -204,7 +258,7 @@
 
   <div id="toast" class="toast"></div>
 
-  <script src="config.js?v=3"></script>
-  <script src="script.js?v=3"></script>
+  <script src="config.js?v=4"></script>
+  <script src="script.js?v=4"></script>
 </body>
 </html>

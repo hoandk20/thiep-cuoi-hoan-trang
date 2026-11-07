@@ -129,15 +129,23 @@
   // Trình duyệt chặn tự phát nhạc: phát ở lần chạm/click đầu tiên nếu chưa phát
   ['pointerdown', 'touchend', 'keydown'].forEach(ev => document.addEventListener(ev, () => { if (audio.paused && !userPaused) tryPlay(); }, { passive: true }));
 
-  /* ---- Opening ---- */
-  $('#openBtn').addEventListener('click', () => {
-    tryPlay();
-    const op = $('#opening');
-    op.classList.add('open');
-    fireworks();
-    setTimeout(() => document.body.classList.remove('locked'), 900);
-    setTimeout(() => op.classList.add('gone'), 2400);
-  });
+  /* ---- Opening: phong bì → cô dâu chú rể hôn nhau → cổng mở + pháo hoa ---- */
+  const op = $('#opening'), env = $('#envelope');
+  let opened = false;
+  function openCard() {
+    if (opened) return; opened = true;
+    userPaused = false; tryPlay();              // nhạc chạy ngay khi chạm phong bì
+    op.classList.add('kiss');                   // nắp phong bì mở, hiện cảnh hôn nhau
+    setTimeout(() => explodeAt(.5, .38), 2000); // tim nổ đúng lúc hôn
+    setTimeout(() => {
+      op.classList.add('open');                 // 2 cánh cổng mở
+      fireworks();
+      document.body.classList.remove('locked');
+    }, 4200);
+    setTimeout(() => op.classList.add('gone'), 6600);
+  }
+  env.addEventListener('click', openCard);
+  env.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openCard(); } });
 
   /* ---- FX: petals, gold sparkles, fireworks ---- */
   const cv = $('#fx'), ctx = cv.getContext('2d');
@@ -178,7 +186,7 @@
     for (let wave = 0; wave < 3; wave++)
       shots.forEach(([fx, fy], i) => setTimeout(() => launch(fx + R(-.05, .05), fy + R(-.05, .05), pals[(i + wave) % pals.length]), wave * 2000 + i * 220));
   }
-  window.__fireworks = fireworks;
+  function explodeAt(fx, fy) { explode(w * fx, h * fy, 50, pals[1]); }
 
   function loop() {
     ctx.clearRect(0, 0, w, h);
