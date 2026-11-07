@@ -310,6 +310,7 @@
       arm: q('.g-arm'), arm2: q('.g-arm2'), head: q('.g-head'), box: q('.ringbox'), lid: q('.ringbox .lid'), eyeO: q('.g-head .eye-open'), eyeC: q('.g-head .eye-closed'), blush: q('.g-head .blush') };
     const B = { root: q('.bride'), walk: q('.bride .walker'), lean: q('.bride .lean'), arm: q('.b-arm'), arm2: q('.b-arm2'), bouquet: q('.b-arm .bouquet'), head: q('.b-head'), foot: q('.b-foot'),
       eyeO: q('.b-head .eye-open'), eyeC: q('.b-head .eye-closed'), eyeH: q('.b-head .eye-heart'), blush: q('.b-head .blush') };
+    const lips = [['.g-head', 0], ['.b-head', 1]].map(([c]) => ({ m: q(c + ' .mouth'), p: q(c + ' .pucker') }));
     const doves = q('.doves'), wings = [...svg.querySelectorAll('.doves .wing')];
     const cupid = q('.cupid'), cWing = q('.cupid .c-wing'), arrow = q('.arrow'), sweat = q('.g-head .sweat');
     const crowd = q('.audience');
@@ -339,7 +340,7 @@
       const tl = t < 7.6 ? t : (t < 11.6 ? 7.6 : t - 4);   // đoạn kết lùi 4s sau phần cúi chào hai họ
       // --- đi vào: giảm tốc dần, bước chân tính theo quãng đường nên không trượt chân ---
       const pw = seg(t, .9, 2.7), walkD = 170 * outQuad(pw);
-      const pa = seg(t, 3.9, 4.4), appD = 23 * inOut(pa);
+      const pa = seg(t, 3.9, 4.4), appD = 30 * inOut(pa);
       const amp = (pw > 0 && pw < 1 ? Math.pow(1 - pw, .7) : 0) + .45 * bump(pa);
       const phase = (walkD + appD) / 44 * Math.PI * 2;
       const tw = seg(t, 5.3, 6.2), twE = inOut(tw);           // xoay vòng
@@ -351,7 +352,7 @@
       const gx = -240 + walkD + appD - 30 * wave - 28 * sep, bx = 240 - walkD - appD + 20 * bump(tw) + 30 * wave + 28 * sep;
       const vis = clamp((t - .9) / .35);
       op_(G.root, vis); op_(B.root, vis);
-      set(G.root, `translate(${gx} 0)`); set(B.root, `translate(${bx} 0)`);
+      set(G.root, `translate(${gx} 0) scale(.86)`); set(B.root, `translate(${bx} 0) scale(.86)`);
       // nhún theo bước; cô dâu nhảy cẫng 2 lần khi thấy nhẫn, nhún nhẹ khi xoay
       const hop = (t > 3.15 && t < 3.85 ? 16 * Math.abs(Math.sin(2 * Math.PI * seg(t, 3.15, 3.85))) : 0) + 6 * bump(tw);
       set(G.walk, `translate(0 ${-4 * amp * Math.abs(Math.sin(phase))})`);
@@ -368,7 +369,7 @@
       // tay sau chú rể: đánh ngược tay trước khi đi, giơ lên vẫy cùng lúc chào khách
       set(G.arm2, `rotate(${14 * amp * Math.sin(phase) + 150 * wave - 18 * waveSw} -5 -126)`);
       // tay trước cô dâu: đánh khi đi → che miệng bất ngờ khi thấy nhẫn → đặt lên vai chú rể khi hôn → vẫy chào
-      const b2 = -10 * amp * Math.sin(phase) + 150 * bump(seg(t, 3.15, 3.95)) + 100 * (inOut(seg(t, 4.15, 4.45)) - inOut(seg(t, 5.1, 5.3))) + 120 * wave + 20 * waveSw;
+      const b2 = -10 * amp * Math.sin(phase) - 115 * wave - 20 * waveSw;   // tay sau: chỉ đung đưa và giơ lên phía sau, không vắt qua thân
       set(B.arm2, `rotate(${b2} 4.8 -125)`);
       op_(G.box, clamp(seg(t, 2.85, 3.0) - seg(t, 3.75, 3.95)));
       set(G.box, `rotate(${-armA} 10 -75) translate(10 -75) scale(${1.6 * (.6 + .4 * outBack(seg(t, 2.85, 3.1)))}) translate(-10 75)`);
@@ -384,7 +385,7 @@
       const surprise = -40 * bump(seg(t, 3.1, 3.9));
       const windup = 35 * bump(seg(t, 6.15, 6.45));
       const toss = -165 * (outBack(seg(t, 6.45, 6.75)) - inOut(seg(t, 7.0, 7.5)));
-      set(B.arm, `rotate(${surprise + windup + toss - 140 * wave - 22 * waveSw} -3.2 -125)`);
+      set(B.arm, `rotate(${surprise + windup + toss + 105 * wave + 22 * waveSw} -3.2 -125)`);
       // tung bó hoa: tách khỏi tay, bay vút lên xoay tròn
       once('release', t, 6.65, () => {
         const [x, y] = screenOf(B.bouquet); flyFrom = toSvg(x, y);
@@ -403,6 +404,9 @@
       set(B.eyeH, `translate(-19 -166) scale(${1.15 + .25 * Math.abs(Math.sin(t * 9))}) translate(19 166)`);
       op_(B.eyeO, (1 - closed) * (1 - heart)); op_(B.eyeC, closed);
       op_(G.eyeO, 1 - closed); op_(G.eyeC, closed);
+      // môi chu ra lúc hôn
+      const kissLips = seg(t, 4.3, 4.45) - seg(t, 5.2, 5.3);
+      lips.forEach(L => { op_(L.m, 1 - kissLips); op_(L.p, kissLips); });
       op_(G.blush, seg(t, 4.45, 5)); op_(B.blush, Math.max(seg(t, 4.45, 5), heart * .8));
       // hất chân sau khi hôn (ẩn khi xoay)
       const fp = seg(t, 4.45, 5.0);
