@@ -1,4 +1,4 @@
-# 💍 Thiệp cưới Đình Hoàn & Thu Trang — 28.12.2026
+# 💍 Thiệp cưới Đình Hoàn & Thu Trang — 27 & 28.12.2026
 
 Web thiệp cưới tĩnh (HTML/CSS/JS thuần), chạy trên GitHub Pages.
 
@@ -20,7 +20,7 @@ Nên nén ảnh (< 500KB/ảnh, cạnh dài ~1600px) để trang tải nhanh.
 Mọi chữ (tên, giờ làm lễ, tên bố mẹ, số tài khoản, chuyện tình…) nằm trong **`config.js`**.
 
 ## Nhạc nền
-Bỏ file nhạc vào `music/nhac-nen.mp3` — nút nhạc sẽ tự hiện.
+Bỏ file nhạc vào thư mục `music/` và đặt tên **`nhac-nen.mp3`** (không dấu, không khoảng trắng). Muốn dùng tên khác thì sửa dòng `music:` trong `config.js`. Nhạc phát khi khách bấm "Mở thiệp".
 
 ## Xem thử trên máy
 ```bash

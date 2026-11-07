@@ -3,56 +3,89 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Thiệp Cưới Đình Hoàn & Thu Trang · 28.12.2026</title>
-  <meta name="description" content="Trân trọng kính mời bạn đến dự lễ cưới của Đình Hoàn & Thu Trang vào ngày 28/12/2026.">
-  <meta property="og:title" content="Đình Hoàn ❤ Thu Trang — Save the Date 28.12.2026">
+  <title>Thiệp Cưới Đình Hoàn & Thu Trang · 27–28.12.2026</title>
+  <meta name="description" content="Trân trọng kính mời bạn đến dự lễ cưới của Đình Hoàn & Thu Trang vào ngày 27 & 28/12/2026.">
+  <meta property="og:title" content="Đình Hoàn ❤ Thu Trang — 27 & 28.12.2026">
   <meta property="og:description" content="Trân trọng kính mời bạn đến chung vui cùng gia đình chúng mình.">
   <meta property="og:image" content="images/cover.jpg">
-  <meta name="theme-color" content="#7a1c30">
+  <meta name="theme-color" content="#5a0f20">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Be+Vietnam+Pro:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Be+Vietnam+Pro:wght@300;400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body class="locked">
 
-  <!-- ====== MÀN HÌNH MỞ THIỆP ====== -->
+  <!-- Hoạ tiết vàng dùng lại nhiều lần -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <linearGradient id="goldGrad" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#f7e3a8"/><stop offset=".45" stop-color="#d4a548"/>
+        <stop offset=".7" stop-color="#fff1c4"/><stop offset="1" stop-color="#b8862f"/>
+      </linearGradient>
+      <symbol id="flourish" viewBox="0 0 240 40">
+        <g fill="none" stroke="url(#goldGrad)" stroke-width="1.6" stroke-linecap="round">
+          <path d="M106 20H8M134 20H232"/>
+          <path d="M80 20c-8-14-30-16-34-4c-3 9 8 13 13 6"/>
+          <path d="M160 20c8-14 30-16 34-4c3 9-8 13-13 6"/>
+          <path d="M80 20c-8 14-30 16-34 4"/><path d="M160 20c8 14 30 16 34 4"/>
+          <circle cx="8" cy="20" r="2.2" fill="#d4a548"/><circle cx="232" cy="20" r="2.2" fill="#d4a548"/>
+        </g>
+        <path d="M120 8l8 12-8 12-8-12z" fill="url(#goldGrad)"/>
+        <circle cx="120" cy="20" r="3" fill="#7a1c30"/>
+      </symbol>
+      <symbol id="corner" viewBox="0 0 80 80">
+        <g fill="none" stroke="url(#goldGrad)" stroke-width="2" stroke-linecap="round">
+          <path d="M3 77V24Q3 3 24 3H77"/>
+          <path d="M13 60V30Q13 13 30 13H60"/>
+          <path d="M24 24c10 0 14 6 10 12s-12 2-10-4"/>
+        </g>
+        <circle cx="3" cy="77" r="3" fill="#d4a548"/><circle cx="77" cy="3" r="3" fill="#d4a548"/>
+      </symbol>
+    </defs>
+  </svg>
+
+  <!-- ====== MÀN HÌNH MỞ THIỆP: CỔNG CƯỚI ====== -->
   <div id="opening">
-    <div class="envelope">
-      <div class="env-flap"></div>
-      <div class="env-body">
-        <div class="seal">囍</div>
-        <p class="env-small">Trân trọng kính mời</p>
-        <h1 class="script env-names"><span data-k="groom.shortName"></span> <span class="amp">&</span> <span data-k="bride.shortName"></span></h1>
-        <p class="env-date" data-k="dateText"></p>
-        <button id="openBtn" class="btn-gold">Mở thiệp ✉</button>
-      </div>
+    <div class="door left"><div class="door-inner"><span class="door-xi">囍</span></div></div>
+    <div class="door right"><div class="door-inner"><span class="door-xi">囍</span></div></div>
+    <div class="gate-card">
+      <svg class="corner tl"><use href="#corner"/></svg><svg class="corner tr"><use href="#corner"/></svg>
+      <svg class="corner bl"><use href="#corner"/></svg><svg class="corner br"><use href="#corner"/></svg>
+      <p class="env-small">Trân trọng kính mời</p>
+      <h1 class="script gold-text env-names"><span data-k="groom.shortName"></span><br><span class="amp">&</span> <span data-k="bride.shortName"></span></h1>
+      <svg class="flourish"><use href="#flourish"/></svg>
+      <p class="env-date" data-k="dateText"></p>
+      <button id="openBtn" class="btn-gold">Mở thiệp</button>
+      <p class="env-hint">Bật âm thanh để trọn vẹn cảm xúc ♫</p>
     </div>
   </div>
 
-  <canvas id="petals"></canvas>
-  <button id="musicBtn" class="music-btn" aria-label="Bật/tắt nhạc" hidden>♫</button>
-  <audio id="bgm" loop preload="none"></audio>
+  <canvas id="fx"></canvas>
+  <button id="musicBtn" class="music-btn" aria-label="Bật/tắt nhạc"><span class="disc">♫</span></button>
+  <audio id="bgm" loop preload="auto"></audio>
 
   <!-- ====== HERO ====== -->
   <header class="hero" id="top">
     <div class="hero-bg" id="heroBg"></div>
     <div class="hero-overlay"></div>
+    <div class="hero-frame">
+      <svg class="corner tl"><use href="#corner"/></svg><svg class="corner tr"><use href="#corner"/></svg>
+      <svg class="corner bl"><use href="#corner"/></svg><svg class="corner br"><use href="#corner"/></svg>
+    </div>
     <div class="hero-content">
-      <p class="eyebrow reveal">Save the date</p>
-      <h1 class="script hero-names reveal">
+      <div class="xi-badge reveal">囍</div>
+      <p class="eyebrow reveal">We are getting married</p>
+      <h1 class="script hero-names gold-text reveal">
         <span data-k="groom.shortName"></span>
         <span class="amp">&</span>
         <span data-k="bride.shortName"></span>
       </h1>
-      <div class="hero-date reveal">
-        <span class="line"></span>
-        <span data-k="dateText"></span>
-        <span class="line"></span>
-      </div>
+      <svg class="flourish reveal"><use href="#flourish"/></svg>
+      <p class="hero-date reveal" data-k="dateText"></p>
       <p class="hero-quote reveal" data-k="quote"></p>
-      <a href="#invite" class="scroll-hint" aria-label="Cuộn xuống">⌄</a>
     </div>
+    <a href="#invite" class="scroll-hint" aria-label="Cuộn xuống"><span></span></a>
   </header>
 
   <nav class="topnav" id="topnav">
@@ -61,35 +94,37 @@
     <a href="#story">Chuyện tình</a>
     <a href="#events">Sự kiện</a>
     <a href="#album">Album</a>
-    <a href="#rsvp">Xác nhận</a>
     <a href="#gift">Mừng cưới</a>
   </nav>
 
   <main>
     <!-- ====== LỜI MỜI + ĐẾM NGƯỢC ====== -->
     <section id="invite" class="section invite">
-      <div class="ornament reveal">❦</div>
+      <svg class="flourish reveal"><use href="#flourish"/></svg>
       <p class="kicker reveal">Trân trọng báo tin lễ thành hôn của</p>
-      <h2 class="script big reveal"><span data-k="groom.fullName"></span></h2>
-      <p class="kicker reveal">&</p>
-      <h2 class="script big reveal"><span data-k="bride.fullName"></span></h2>
-      <div class="date-card reveal">
-        <div class="dc-side" data-k="weekdayText"></div>
-        <div class="dc-main">
-          <span class="dc-day">28</span>
-          <span class="dc-month">Tháng 12 · 2026</span>
-        </div>
-        <div class="dc-side">10:00</div>
-      </div>
-      <p class="lunar reveal" data-k="lunarText"></p>
+      <h2 class="script big gold-deep reveal" data-k="groom.fullName"></h2>
+      <p class="amp-big reveal">&</p>
+      <h2 class="script big gold-deep reveal" data-k="bride.fullName"></h2>
 
+      <div class="days" id="days"></div>
+
+      <h3 class="cd-title reveal">Đếm ngược đến ngày vui</h3>
       <div class="countdown reveal" id="countdown">
         <div><b id="cd-d">0</b><span>Ngày</span></div>
         <div><b id="cd-h">0</b><span>Giờ</span></div>
         <div><b id="cd-m">0</b><span>Phút</span></div>
         <div><b id="cd-s">0</b><span>Giây</span></div>
       </div>
-      <a class="btn-outline reveal" id="calBtn" href="#">📅 Thêm vào lịch</a>
+      <a class="btn-outline reveal" id="calBtn" href="#" target="_blank" rel="noopener">📅 Thêm vào lịch</a>
+    </section>
+
+    <!-- ====== QUOTE PARALLAX ====== -->
+    <section class="quote-band" id="quoteBand">
+      <div class="qb-inner reveal">
+        <p class="qb-mark">“</p>
+        <p class="qb-text">Yêu không phải là nhìn nhau, mà là cùng nhau nhìn về một hướng.</p>
+        <svg class="flourish"><use href="#flourish"/></svg>
+      </div>
     </section>
 
     <!-- ====== CẶP ĐÔI ====== -->
@@ -97,18 +132,24 @@
       <h2 class="section-title reveal">Cô Dâu & Chú Rể</h2>
       <div class="couple-grid">
         <article class="person reveal from-left">
-          <div class="frame"><img data-src-k="groom.photo" alt="Chú rể"></div>
+          <div class="frame-wrap">
+            <div class="ring"></div>
+            <div class="frame"><img data-src-k="groom.photo" alt="Chú rể"></div>
+          </div>
           <p class="role">Chú rể</p>
-          <h3 class="script" data-k="groom.fullName"></h3>
+          <h3 class="script gold-deep" data-k="groom.fullName"></h3>
           <p class="born">Sinh năm <span data-k="groom.born"></span></p>
           <p class="parents" data-k="groom.parents"></p>
           <p class="intro" data-k="groom.intro"></p>
         </article>
-        <div class="heart-mid reveal">❤</div>
+        <div class="heart-mid reveal"><span>❤</span></div>
         <article class="person reveal from-right">
-          <div class="frame"><img data-src-k="bride.photo" alt="Cô dâu"></div>
+          <div class="frame-wrap">
+            <div class="ring"></div>
+            <div class="frame"><img data-src-k="bride.photo" alt="Cô dâu"></div>
+          </div>
           <p class="role">Cô dâu</p>
-          <h3 class="script" data-k="bride.fullName"></h3>
+          <h3 class="script gold-deep" data-k="bride.fullName"></h3>
           <p class="born">Sinh năm <span data-k="bride.born"></span></p>
           <p class="parents" data-k="bride.parents"></p>
           <p class="intro" data-k="bride.intro"></p>
@@ -125,40 +166,13 @@
     <!-- ====== SỰ KIỆN ====== -->
     <section id="events" class="section events">
       <h2 class="section-title light reveal">Sự Kiện Cưới</h2>
-      <div class="event-grid" id="eventGrid"></div>
+      <div id="eventDays"></div>
     </section>
 
     <!-- ====== ALBUM ====== -->
     <section id="album" class="section album">
       <h2 class="section-title reveal">Album Hình Cưới</h2>
       <div class="masonry" id="masonry"></div>
-    </section>
-
-    <!-- ====== RSVP ====== -->
-    <section id="rsvp" class="section rsvp">
-      <h2 class="section-title reveal">Xác Nhận Tham Dự</h2>
-      <p class="sub reveal">Sự hiện diện của bạn là niềm vinh hạnh cho gia đình chúng mình.</p>
-      <form id="rsvpForm" class="rsvp-form reveal">
-        <input name="name" placeholder="Họ và tên *" required>
-        <input name="phone" placeholder="Số điện thoại">
-        <select name="side">
-          <option>Khách nhà trai</option>
-          <option>Khách nhà gái</option>
-        </select>
-        <select name="attend">
-          <option>Chắc chắn sẽ đến 🎉</option>
-          <option>Sẽ cố gắng sắp xếp</option>
-          <option>Rất tiếc không thể đến</option>
-        </select>
-        <select name="guests">
-          <option>Đi 1 người</option>
-          <option>Đi 2 người</option>
-          <option>Đi 3 người trở lên</option>
-        </select>
-        <textarea name="wish" rows="3" placeholder="Gửi lời chúc tới cô dâu chú rể…"></textarea>
-        <button class="btn-gold" type="submit">Gửi xác nhận</button>
-      </form>
-      <div class="wishes" id="wishes"></div>
     </section>
 
     <!-- ====== MỪNG CƯỚI ====== -->
@@ -172,7 +186,8 @@
   <footer class="footer">
     <div class="footer-bg" id="footerBg"></div>
     <div class="footer-inner">
-      <p class="script big">Thank you!</p>
+      <p class="script huge gold-text">Thank you!</p>
+      <svg class="flourish"><use href="#flourish"/></svg>
       <p>Rất hân hạnh được đón tiếp</p>
       <p class="script mid"><span data-k="groom.shortName"></span> & <span data-k="bride.shortName"></span></p>
       <p class="tiny" data-k="dateText"></p>

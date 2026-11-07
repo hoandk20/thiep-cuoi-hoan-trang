@@ -20,34 +20,38 @@ window.WEDDING = {
     parents: "Con gái của Ông … & Bà …" // sửa tên bố mẹ cô dâu
   },
 
-  // Ngày giờ chính (dùng cho bộ đếm ngược) — định dạng ISO, giờ Việt Nam
-  weddingDateTime: "2026-12-28T10:00:00+07:00",
-  dateText: "28 . 12 . 2026",
-  weekdayText: "Thứ Hai",
-  lunarText: "Tức ngày 20 tháng 11 năm Bính Ngọ",
+  // Bộ đếm ngược đếm tới thời điểm này (giờ Việt Nam)
+  countdownTo: "2026-12-27T11:00:00+07:00",
+  dateText: "27 & 28 . 12 . 2026",
+
+  // Hai ngày cưới (hiện ở phần "Lời mời")
+  days: [
+    { weekday: "Chủ Nhật", day: "27", month: "Tháng 12 · 2026", lunar: "Ngày 19 tháng 11 năm Bính Ngọ" },
+    { weekday: "Thứ Hai", day: "28", month: "Tháng 12 · 2026", lunar: "Ngày 20 tháng 11 năm Bính Ngọ" }
+  ],
 
   coverPhoto: "images/cover.jpg",
   quote: "Hai trái tim, một nhịp đập — từ hôm nay, chúng ta là một nhà.",
 
-  // Sự kiện (sửa giờ cho đúng thực tế)
+  // Sự kiện — chia theo ngày. Sửa giờ / tên lễ cho đúng thực tế.
   events: [
     {
-      title: "Lễ Vu Quy",
-      side: "Tại Nhà Gái",
-      time: "08:00",
-      date: "Thứ Hai, 28/12/2026",
-      address: "Tư gia nhà gái",
-      map: "https://maps.app.goo.gl/mYDa8UV86XMmxG7z8",
-      icon: "🌸"
+      dayLabel: "Chủ Nhật · 27 tháng 12 năm 2026",
+      items: [
+        { title: "Tiệc Mừng Vu Quy", side: "Tại Nhà Gái", time: "11:00", address: "Tư gia nhà gái",
+          map: "https://maps.app.goo.gl/mYDa8UV86XMmxG7z8", icon: "🥂" },
+        { title: "Tiệc Mừng Thành Hôn", side: "Tại Nhà Trai", time: "11:00", address: "Tư gia nhà trai",
+          map: "https://maps.app.goo.gl/q8WVG9ErECqNRzEM6", icon: "🥂" }
+      ]
     },
     {
-      title: "Lễ Thành Hôn",
-      side: "Tại Nhà Trai",
-      time: "10:00",
-      date: "Thứ Hai, 28/12/2026",
-      address: "Tư gia nhà trai",
-      map: "https://maps.app.goo.gl/q8WVG9ErECqNRzEM6",
-      icon: "💍"
+      dayLabel: "Thứ Hai · 28 tháng 12 năm 2026",
+      items: [
+        { title: "Lễ Vu Quy", side: "Tại Nhà Gái", time: "08:00", address: "Tư gia nhà gái",
+          map: "https://maps.app.goo.gl/mYDa8UV86XMmxG7z8", icon: "🌸" },
+        { title: "Lễ Thành Hôn", side: "Tại Nhà Trai", time: "10:00", address: "Tư gia nhà trai",
+          map: "https://maps.app.goo.gl/q8WVG9ErECqNRzEM6", icon: "💍" }
+      ]
     }
   ],
 
@@ -56,7 +60,7 @@ window.WEDDING = {
     { date: "Lần đầu gặp gỡ", title: "Định mệnh gõ cửa", text: "Một ngày bình thường bỗng trở nên đặc biệt khi hai ánh mắt lần đầu chạm nhau.", photo: "images/couple-1.jpg" },
     { date: "Hẹn hò", title: "Những ngày bên nhau", text: "Từ những buổi cà phê nhỏ đến những chuyến đi xa, mỗi khoảnh khắc đều là kỷ niệm.", photo: "images/couple-2.jpg" },
     { date: "Lời cầu hôn", title: "Em đồng ý", text: "Một câu hỏi, một cái gật đầu — và hành trình mới chính thức bắt đầu.", photo: "images/album-03.jpg" },
-    { date: "28 . 12 . 2026", title: "Về chung một nhà", text: "Ngày chúng mình chính thức nắm tay nhau trước hai họ, hứa hẹn yêu thương trọn đời.", photo: "images/album-06.jpg" }
+    { date: "27 & 28 . 12 . 2026", title: "Về chung một nhà", text: "Ngày chúng mình chính thức nắm tay nhau trước hai họ, hứa hẹn yêu thương trọn đời.", photo: "images/album-06.jpg" }
   ],
 
   // Album ảnh — thêm bao nhiêu ảnh cũng được, chỉ cần đúng đường dẫn
@@ -72,6 +76,6 @@ window.WEDDING = {
     { who: "Mừng cưới Cô dâu", bank: "Ngân hàng …", account: "0000000000", holder: "THU TRANG", qr: "images/qr-bride.jpg" }
   ],
 
-  // Nhạc nền: bỏ file mp3 vào thư mục /music với đúng tên này
+  // Nhạc nền: file trong thư mục /music. Tên file nên viết không dấu, không khoảng trắng.
   music: "music/nhac-nen.mp3"
 };
