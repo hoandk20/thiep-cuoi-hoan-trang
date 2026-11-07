@@ -357,3 +357,31 @@ a{color:inherit}
 .polaroid small{display:block;font-family:var(--serif);letter-spacing:.2em;color:var(--muted);font-size:.72rem}
 .polaroid::before{content:"";position:absolute;top:-12px;left:50%;width:90px;height:26px;transform:translateX(-50%) rotate(-3deg);
   background:rgba(247,227,168,.75);box-shadow:0 2px 4px rgba(0,0,0,.12)}
+
+/* ---------- Cô dâu chú rể chạy phát thiệp (mục Lời mời) ---------- */
+.invite-run{max-width:680px;margin:6px auto 8px}
+.invite-run svg{display:block;width:100%;height:auto;overflow:visible}
+.invite-run *{transform-box:fill-box}
+.invite-run .runner{animation:runX 9s linear infinite}
+.invite-run .r-bride{animation-delay:-8.15s}                 /* cô dâu chạy theo sau chú rể */
+.invite-run .r-bride .face,.invite-run .r-bride .bob,.invite-run .r-bride .foot,.invite-run .r-bride .toss{animation-delay:-8.15s}
+@keyframes runX{0%{transform:translateX(70px)}46%{transform:translateX(570px)}50%{transform:translateX(570px)}96%{transform:translateX(70px)}100%{transform:translateX(70px)}}
+.invite-run .face{transform-origin:50% 100%;animation:faceTurn 9s linear infinite}
+@keyframes faceTurn{0%,45%{transform:scaleX(1)}50%,95%{transform:scaleX(-1)}100%{transform:scaleX(1)}}
+.invite-run .bob{animation:runBob .3s ease-in-out infinite alternate}
+@keyframes runBob{from{transform:translateY(0) rotate(3deg)}to{transform:translateY(-5px) rotate(5deg)}}
+.invite-run .leg{transform-origin:50% 0;animation:runLeg .3s ease-in-out infinite alternate}
+.invite-run .leg.back{animation-direction:alternate-reverse}
+@keyframes runLeg{from{transform:rotate(-32deg)}to{transform:rotate(32deg)}}
+.invite-run .foot{animation:runFoot .3s ease-in-out infinite alternate}
+.invite-run .foot.b{animation-direction:alternate-reverse}
+@keyframes runFoot{from{transform:translate(-3px,0)}to{transform:translate(3px,-3px)}}
+.invite-run .veil-r{transform-origin:100% 0;animation:veilRun .6s ease-in-out infinite alternate}
+@keyframes veilRun{from{transform:skewX(4deg)}to{transform:skewX(-6deg) scaleX(1.08)}}
+.invite-run .toss{opacity:0;animation:toss 1.8s cubic-bezier(.2,.6,.4,1) infinite;animation-delay:var(--d)}
+.invite-run .r-bride .toss{animation-delay:calc(var(--d) - 8.15s)}
+@keyframes toss{0%{opacity:0;transform:translate(22px,-70px) rotate(0) scale(.6)}12%{opacity:1}
+  100%{opacity:0;transform:translate(calc(22px + var(--dx)),-170px) rotate(260deg) scale(1.15)}}
+.invite-run:not(.play) *{animation-play-state:paused!important}
+.invite-run .face,.invite-run .bob{transform-box:view-box;transform-origin:0 0}   /* lật/nghiêng quanh chân nhân vật */
+.invite-run .toss{transform-origin:50% 50%}

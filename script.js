@@ -156,6 +156,10 @@
   const io = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } }), { threshold: .12 });
   $$('.reveal').forEach(el => io.observe(el));
 
+  /* ---- Cảnh chạy phát thiệp: chỉ chạy khi đang nhìn thấy (tiết kiệm pin) ---- */
+  const runScene = $('.invite-run');
+  if (runScene) new IntersectionObserver(es => es.forEach(en => runScene.classList.toggle('play', en.isIntersecting))).observe(runScene);
+
   /* ---- Active nav ---- */
   const links = $$('.topnav a');
   const navIo = new IntersectionObserver(es => es.forEach(en => {
