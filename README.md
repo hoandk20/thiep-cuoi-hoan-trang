@@ -13,7 +13,7 @@ Tất cả ảnh nằm trong thư mục **`images/`**. Chỉ cần chép ảnh t
 | `qr-groom.jpg` / `qr-bride.jpg` | Mã QR mừng cưới | vuông |
 
 Muốn thêm ảnh album: bỏ ảnh vào `images/` rồi thêm đường dẫn vào mảng `album` trong `config.js`.
-Nên nén ảnh (< 500KB/ảnh, cạnh dài ~1600px) để trang tải nhanh.
+Nên nén ảnh (~100–250KB/ảnh, cạnh dài ~1200px) để khách dùng 4G tải nhanh.
 
 ## Sửa nội dung
 Mọi chữ (tên, giờ làm lễ, tên bố mẹ, số tài khoản, chuyện tình…) nằm trong **`config.js`**.

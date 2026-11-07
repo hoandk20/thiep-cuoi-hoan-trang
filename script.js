@@ -10,8 +10,13 @@
   $$('[data-k]').forEach(el => { const v = get(el.dataset.k); if (v !== undefined) el.textContent = v; });
   $$('[data-src-k]').forEach(el => { el.src = url(get(el.dataset.srcK)); });
   $('#heroBg').style.backgroundImage = `url('${url(W.coverPhoto)}')`;
-  $('#quoteBand').style.backgroundImage = `url('${url(W.quotePhoto || W.coverPhoto)}')`;
-  $('#footerBg').style.backgroundImage = `url('${url(W.footerPhoto || W.coverPhoto)}')`;
+  // Ảnh nền phía dưới chỉ tải khi khách cuộn gần tới (tiết kiệm 4G)
+  const lazyBg = [['#quoteBand', W.quotePhoto || W.coverPhoto], ['#footerBg', W.footerPhoto || W.coverPhoto]];
+  const bgIo = new IntersectionObserver(es => es.forEach(en => {
+    if (!en.isIntersecting) return;
+    en.target.style.backgroundImage = `url('${url(en.target.dataset.bg)}')`; bgIo.unobserve(en.target);
+  }), { rootMargin: '600px 0px' });
+  lazyBg.forEach(([s, src]) => { const el = $(s); el.dataset.bg = src; bgIo.observe(el); });
 
   /* ---- Two wedding days ---- */
   $('#days').innerHTML = W.days.map(d => `

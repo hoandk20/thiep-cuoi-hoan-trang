@@ -12,7 +12,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Be+Vietnam+Pro:wght@300;400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=7">
+  <link rel="stylesheet" href="style.css?v=8">
 </head>
 <body class="locked">
 
@@ -166,7 +166,7 @@
 
   <canvas id="fx"></canvas>
   <button id="musicBtn" class="music-btn" aria-label="Bật/tắt nhạc"><span class="disc">♫</span></button>
-  <audio id="bgm" loop preload="auto"></audio>
+  <audio id="bgm" loop preload="none"></audio>
 
   <!-- ====== HERO ====== -->
   <header class="hero" id="top">
@@ -237,7 +237,7 @@
         <div class="couple-photo reveal">
           <div class="frame-wrap">
             <div class="ring"></div>
-            <div class="frame"><img data-src-k="couplePhoto" alt="Cô dâu và chú rể"></div>
+            <div class="frame"><img data-src-k="couplePhoto" alt="Cô dâu và chú rể" loading="lazy"></div>
             <div class="heart-mid"><span>❤</span></div>
           </div>
         </div>
@@ -305,7 +305,7 @@
 
   <div id="toast" class="toast"></div>
 
-  <script src="config.js?v=7"></script>
-  <script src="script.js?v=7"></script>
+  <script src="config.js?v=8"></script>
+  <script src="script.js?v=8"></script>
 </body>
 </html>
