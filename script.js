@@ -192,7 +192,7 @@
     userPaused = false; tryPlay();              // nhạc chạy ngay khi chạm phong bì
     op.classList.add('kiss');
     coupleTimeline();
-    timers.push(setTimeout(finish, 11200));
+    timers.push(setTimeout(finish, 15200));
   }
   env.addEventListener('click', openCard);
   env.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openCard(); } });
@@ -216,6 +216,9 @@
       eyeO: q('.b-head .eye-open'), eyeC: q('.b-head .eye-closed'), eyeH: q('.b-head .eye-heart'), blush: q('.b-head .blush') };
     const doves = q('.doves'), wings = [...svg.querySelectorAll('.doves .wing')];
     const cupid = q('.cupid'), cWing = q('.cupid .c-wing'), arrow = q('.arrow'), sweat = q('.g-head .sweat');
+    const relsL = q('.rels.left'), relsR = q('.rels.right');
+    const people = [...svg.querySelectorAll('.rel')].map((el, i) => ({ side: el.closest('.rels').classList.contains('left') ? 0 : 1, i,
+      bob: el.querySelector('.rel-bob'), h1: el.querySelector('.h1'), h2: el.querySelector('.h2') }));
     const cd3 = $('#cd3'), flash = $('#flash'), pol = $('#polaroid');
     $('#polaroidImg').src = url(W.couplePhoto);
     const fly = B.bouquet.cloneNode(true); fly.style.opacity = 0; svg.appendChild(fly);
@@ -237,14 +240,19 @@
 
     function frame(now) {
       const t = (now - t0) / 1000;
+      const tl = t < 7.6 ? t : (t < 11.6 ? 7.6 : t - 4);   // đoạn kết lùi 4s sau phần cúi chào hai họ
       // --- đi vào: giảm tốc dần, bước chân tính theo quãng đường nên không trượt chân ---
       const pw = seg(t, .9, 2.7), walkD = 170 * outQuad(pw);
       const pa = seg(t, 3.9, 4.4), appD = 36 * inOut(pa);
       const amp = (pw > 0 && pw < 1 ? Math.pow(1 - pw, .7) : 0) + .45 * bump(pa);
       const phase = (walkD + appD) / 44 * Math.PI * 2;
       const tw = seg(t, 5.3, 6.2), twE = inOut(tw);           // xoay vòng
-      const wave = inOut(seg(t, 7.6, 7.9)) - inOut(seg(t, 8.7, 9.0));   // vẫy tay chào khách
-      const gx = -240 + walkD + appD - 30 * wave, bx = 240 - walkD - appD + 20 * bump(tw) + 30 * wave;
+      const wave = inOut(seg(tl, 7.6, 7.9)) - inOut(seg(tl, 8.7, 9.0));
+      // cúi chào hai họ: quay sang trái chào nhà trai, quay sang phải chào nhà gái
+      const sep = inOut(seg(t, 7.6, 7.9)) - inOut(seg(t, 10.0, 10.4));
+      const gTurn = inOut(seg(t, 7.6, 7.9)) - inOut(seg(t, 8.8, 9.2)), bTurn = inOut(seg(t, 8.8, 9.2)) - inOut(seg(t, 10.0, 10.4));
+      const bowL = Math.pow(bump(seg(t, 7.95, 8.8)), .7), bowR = Math.pow(bump(seg(t, 9.25, 10.1)), .7);   // vẫy tay chào khách
+      const gx = -240 + walkD + appD - 30 * wave - 28 * sep, bx = 240 - walkD - appD + 20 * bump(tw) + 30 * wave + 28 * sep;
       const vis = clamp((t - .9) / .35);
       op_(G.root, vis); op_(B.root, vis);
       set(G.root, `translate(${gx} 0)`); set(B.root, `translate(${bx} 0)`);
@@ -258,19 +266,19 @@
       const offer = inOut(seg(t, 2.8, 3.2)) - inOut(seg(t, 3.75, 4.05));
       const hug = inOut(seg(t, 4.05, 4.5));
       const shake = (t > 2.95 && t < 3.3) ? 2.2 * Math.sin(t * 70) : 0;   // run tay hồi hộp
-      const waveSw = Math.sin((t - 7.6) * 11) * wave;
-      const armA = -12 * amp * Math.sin(phase) - 75 * offer - 45 * hug - 105 * bump(tw) + shake - 100 * wave + 16 * waveSw;
+      const waveSw = Math.sin((tl - 7.6) * 11) * wave;
+      const armA = -12 * amp * Math.sin(phase) - 75 * offer - 45 * hug * (1 - sep) - 105 * bump(tw) + shake - 100 * wave + 16 * waveSw;
       set(G.arm, `rotate(${armA} 31 -130)`);
       op_(G.box, clamp(seg(t, 2.85, 3.0) - seg(t, 3.75, 3.95)));
       set(G.box, `rotate(${-armA} 35 -69) translate(35 -69) scale(${1.6 * (.6 + .4 * outBack(seg(t, 2.85, 3.1)))}) translate(-35 69)`);
       set(G.lid, `rotate(${-110 * outBack(seg(t, 3.05, 3.35))} 27 -71)`);
-      set(G.head, `rotate(${6 * bump(seg(t, 2.6, 3.2))} 0 -150)`);
-      set(B.head, `rotate(${-9 * bump(seg(t, 3.2, 3.9))} -2 -148)`);
+      set(G.head, `rotate(${6 * bump(seg(t, 2.6, 3.2)) + 14 * (bowL + bowR)} 0 -150)`);
+      set(B.head, `rotate(${-9 * bump(seg(t, 3.2, 3.9)) - 14 * (bowL + bowR)} -2 -148)`);
       // nghiêng người hôn, tách nhẹ khi xoay, thở nhẹ
-      const lean = inOut(seg(t, 4.0, 4.45)) * (1 - .8 * bump(tw)) * (1 - wave), breathe = t > 4.6 ? Math.sin((t - 4.6) * 2.4) * .7 : 0;
-      set(G.lean, `rotate(${4 * lean + breathe} 0 0)`);
+      const lean = inOut(seg(t, 4.0, 4.45)) * (1 - .8 * bump(tw)) * (1 - wave) * (1 - sep), breathe = t > 4.6 ? Math.sin((t - 4.6) * 2.4) * .7 : 0;
+      set(G.lean, `rotate(${4 * lean + breathe - 20 * bowL + 20 * bowR} 0 0) scale(${Math.cos(Math.PI * gTurn)} 1)`);
       const spin = Math.cos(2 * Math.PI * twE), flare = 1 + .18 * bump(tw);
-      set(B.lean, `translate(0 ${-4 * lean}) rotate(${-4 * lean - breathe} 0 0) scale(${spin * flare} 1)`);
+      set(B.lean, `translate(0 ${-4 * lean}) rotate(${-4 * lean - breathe - 20 * bowL + 20 * bowR} 0 0) scale(${spin * flare * Math.cos(Math.PI * bTurn)} 1)`);
       // tay cô dâu: giơ hoa bất ngờ → lấy đà → tung hoa → hạ tay
       const surprise = -40 * bump(seg(t, 3.1, 3.9));
       const windup = 35 * bump(seg(t, 6.15, 6.45));
@@ -289,7 +297,7 @@
       once('catch', t, 7.45, () => { const [x, y] = screenOf(fly); burstAt(x, y, 40, pals[0], .7); });
       // mắt: tim khi thấy nhẫn → nhắm khi hôn → mở khi xoay
       const heart = seg(t, 3.25, 3.35) - seg(t, 4.1, 4.2);
-      const closed = seg(t, 4.35, 4.5) - seg(t, 5.2, 5.3);
+      const closed = Math.max(seg(t, 4.35, 4.5) - seg(t, 5.2, 5.3), clamp((bowL + bowR) * 2 - .6));
       op_(B.eyeH, heart);
       set(B.eyeH, `translate(-12 -168) scale(${1.25 + .3 * Math.abs(Math.sin(t * 9))}) translate(12 168)`);
       op_(B.eyeO, (1 - closed) * (1 - heart)); op_(B.eyeC, closed);
@@ -301,7 +309,7 @@
       // đôi bồ câu kéo băng rôn bay vào, lượn nhẹ, vỗ cánh
       const dp = outCubic(seg(t, 4.9, 6.1));
       op_(doves, seg(t, 4.9, 5.1));
-      const away = Math.pow(seg(t, 9.9, 10.9), 2);
+      const away = Math.pow(seg(tl, 9.9, 10.9), 2);
       set(doves, `translate(${-430 * (1 - dp) + 260 * away} ${-296 + 5 * Math.sin(t * 3) - 40 * (1 - dp) - 420 * away})`);
       const flap = Math.sin(t * (dp < 1 || away > 0 ? 18 : 11));
       wings.forEach((w, i) => set(w, `rotate(${(i % 2 ? 22 : -22) * flap} -2 -2)`));
@@ -328,24 +336,44 @@
       once('kiss', t, 4.5, () => { const [x1, y1] = screenOf(G.head), [x2, y2] = screenOf(B.head); burstAt((x1 + x2) / 2, Math.min(y1, y2) - 10, 60, pals[1], 1); });
       once('twirl', t, 5.75, () => { const [x, y] = screenOf(B.walk); burstAt(x, y + 40, 30, pals[2], .6); });
       // đếm 3-2-1 → flash máy ảnh → ảnh polaroid thật rơi xuống
-      const ci = t >= 8.0 && t < 9.0 ? Math.floor((t - 8.0) / .3333) : -1;
+      const ci = tl >= 8.0 && tl < 9.0 ? Math.floor((tl - 8.0) / .3333) : -1;
       if (ci >= 0) {
-        const lp = ((t - 8.0) % .3333) / .3333;
+        const lp = ((tl - 8.0) % .3333) / .3333;
         cd3.textContent = 3 - ci;
         cd3.style.opacity = 1 - lp * .6;
         cd3.style.transform = `scale(${1.6 - .6 * outBack(clamp(lp * 2))})`;
       } else cd3.style.opacity = 0;
-      flash.style.opacity = t >= 9.0 ? Math.max(0, 1 - seg(t, 9.0, 9.55)) : 0;
-      svg.style.opacity = 1 - .55 * seg(t, 9.0, 9.4);
-      const pp = seg(t, 9.05, 9.95);
+      flash.style.opacity = tl >= 9.0 ? Math.max(0, 1 - seg(tl, 9.0, 9.55)) : 0;
+      svg.style.opacity = 1 - .55 * seg(tl, 9.0, 9.4);
+      const pp = seg(tl, 9.05, 9.95);
       if (pp > 0) {
         pol.style.opacity = 1;
-        const y = -160 * (1 - outBack(pp)), r = -25 + 19 * outBack(pp) + (t > 10 ? Math.sin((t - 10) * 2) * 1.2 : 0);
+        const y = -160 * (1 - outBack(pp)), r = -25 + 19 * outBack(pp) + (tl > 10 ? Math.sin((tl - 10) * 2) * 1.2 : 0);
         pol.style.transform = `translate(-50%, calc(-50% + ${y}vh)) rotate(${r}deg)`;
       }
-      once('snap', t, 9.0, () => burstAt(innerWidth / 2, innerHeight / 2, 70, pals[2], 1.1));
-      once('land', t, 9.9, () => burstAt(innerWidth / 2, innerHeight / 2 + 40, 40, pals[1], .8));
-      if (t < 13.5) requestAnimationFrame(frame);
+      once('snap', tl, 9.0, () => burstAt(innerWidth / 2, innerHeight / 2, 70, pals[2], 1.1));
+      once('land', tl, 9.9, () => burstAt(innerWidth / 2, innerHeight / 2 + 40, 40, pals[1], .8));
+      // họ hàng: bước vào sau nụ hôn, vỗ tay; rộn ràng khi được cúi chào; cùng nhảy tung pháo giấy
+      const enter = outCubic(seg(t, 4.6, 5.4));
+      op_(relsL, enter); op_(relsR, enter);
+      set(relsL, `translate(${-150 * (1 - enter)} 0)`); set(relsR, `translate(${150 * (1 - enter)} 0)`);
+      const party = inOut(seg(t, 10.3, 10.6)) - inOut(seg(t, 11.5, 11.9));
+      const hype = [Math.max(.35, bump(seg(t, 7.9, 9.0)), party), Math.max(.35, bump(seg(t, 9.2, 10.3)), party)];
+      people.forEach(P => {
+        const I = t > 4.6 ? hype[P.side] : 0;
+        const d = 1.5 + 1.5 * Math.sin(t * 24 + P.i * 1.7) * I;          // hai tay vỗ vào nhau
+        set(P.h1, `translate(${d} 0)`); set(P.h2, `translate(${-d} 0)`);
+        const hop = 9 * clamp((I - .45) / .55) * Math.abs(Math.sin(t * 8 + P.i * 1.3));
+        set(P.bob, `translate(0 ${-hop})`);
+      });
+      const relAt = (el) => { const r = el.getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height * .3]; };
+      once('cheerL', t, 8.35, () => { const [x, y] = relAt(relsL); burstAt(x, y, 30, pals[1], .55); });
+      once('cheerR', t, 9.65, () => { const [x, y] = relAt(relsR); burstAt(x, y, 30, pals[3], .55); });
+      [10.45, 10.8, 11.15].forEach((at, k) => {
+        once('confL' + k, t, at, () => { const [x, y] = relAt(relsL); burstAt(x, y, 40, pals[(k + 2) % 4], .75); });
+        once('confR' + k, t, at + .15, () => { const [x, y] = relAt(relsR); burstAt(x, y, 40, pals[(k + 1) % 4], .75); });
+      });
+      if (t < 17.5) requestAnimationFrame(frame);
     }
     requestAnimationFrame(frame);
   }
