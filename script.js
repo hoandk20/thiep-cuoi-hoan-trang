@@ -197,6 +197,12 @@
   env.addEventListener('click', openCard);
   env.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openCard(); } });
   $('#skipBtn').addEventListener('click', finish);
+  // chạm vào màn hình trong lúc diễn hoạt → thả tim tại chỗ chạm
+  let tapN = 0;
+  op.addEventListener('pointerdown', e => {
+    if (!op.classList.contains('kiss') || finished || e.target.closest('#skipBtn')) return;
+    burstAt(e.clientX, e.clientY, 18, pals[tapN++ % pals.length], .55);
+  });
 
   /* ---- Diễn hoạt cô dâu chú rể: mỗi khung hình tính lại tư thế từ thời gian t (giây) ----
      0.9–2.7 đi vào · 2.8–3.9 cầu hôn, cô dâu mắt tim nhảy cẫng · 3.9–4.4 tiến lại · 4.4 hôn
@@ -209,6 +215,7 @@
     const B = { root: q('.bride'), walk: q('.bride .walker'), lean: q('.bride .lean'), arm: q('.b-arm'), bouquet: q('.b-arm .bouquet'), head: q('.b-head'), foot: q('.b-foot'),
       eyeO: q('.b-head .eye-open'), eyeC: q('.b-head .eye-closed'), eyeH: q('.b-head .eye-heart'), blush: q('.b-head .blush') };
     const doves = q('.doves'), wings = [...svg.querySelectorAll('.doves .wing')];
+    const cupid = q('.cupid'), cWing = q('.cupid .c-wing'), arrow = q('.arrow'), sweat = q('.g-head .sweat');
     const fly = B.bouquet.cloneNode(true); fly.style.opacity = 0; svg.appendChild(fly);
     let flyFrom = null;
     const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
@@ -247,7 +254,8 @@
       // tay chú rể: đánh khi đi → đưa hộp nhẫn → ôm eo → giơ cao nắm tay xoay cô dâu
       const offer = inOut(seg(t, 2.8, 3.2)) - inOut(seg(t, 3.75, 4.05));
       const hug = inOut(seg(t, 4.05, 4.5));
-      const armA = -12 * amp * Math.sin(phase) - 75 * offer - 45 * hug - 105 * bump(tw);
+      const shake = (t > 2.95 && t < 3.3) ? 2.2 * Math.sin(t * 70) : 0;   // run tay hồi hộp
+      const armA = -12 * amp * Math.sin(phase) - 75 * offer - 45 * hug - 105 * bump(tw) + shake;
       set(G.arm, `rotate(${armA} 31 -130)`);
       op_(G.box, clamp(seg(t, 2.85, 3.0) - seg(t, 3.75, 3.95)));
       set(G.box, `rotate(${-armA} 35 -69) translate(35 -69) scale(${1.6 * (.6 + .4 * outBack(seg(t, 2.85, 3.1)))}) translate(-35 69)`);
@@ -292,6 +300,22 @@
       set(doves, `translate(${-430 * (1 - dp)} ${-296 + 5 * Math.sin(t * 3) - 40 * (1 - dp)})`);
       const flap = Math.sin(t * (dp < 1 ? 18 : 11));
       wings.forEach((w, i) => set(w, `rotate(${(i % 2 ? 22 : -22) * flap} -2 -2)`));
+      // Cupid bay ngang, giương cung bắn mũi tên vào giữa hai người
+      const cp = seg(t, 1.0, 2.9);
+      const cx = -300 + 600 * cp, cy = -235 + 14 * Math.sin(cp * Math.PI * 3);
+      op_(cupid, clamp(seg(t, 1.0, 1.2) - seg(t, 2.7, 2.9)));
+      set(cupid, `translate(${cx} ${cy}) rotate(${6 * Math.sin(t * 5)})`);
+      set(cWing, `rotate(${28 * Math.sin(t * 20)} -4 -4)`);
+      const ap = seg(t, 1.75, 2.15);
+      if (ap > 0 && ap < 1) {
+        const sx = -300 + 600 * seg(1.75, 1.0, 2.9) + 20, sy = -240, ex = 0, ey = -130;
+        const ax = sx + (ex - sx) * ap, ay = sy + (ey - sy) * ap;
+        op_(arrow, 1); set(arrow, `translate(${ax} ${ay}) rotate(${Math.atan2(ey - sy, ex - sx) * 180 / Math.PI})`);
+      } else op_(arrow, 0);
+      once('arrowHit', t, 2.15, () => { const r = svg.getBoundingClientRect(); const pt = svg.createSVGPoint(); pt.x = 0; pt.y = -130; const s = pt.matrixTransform(svg.getScreenCTM()); burstAt(s.x, s.y, 36, pals[1], .7); });
+      // chú rể toát mồ hôi khi đưa nhẫn
+      op_(sweat, clamp(seg(t, 2.85, 2.95) - seg(t, 3.45, 3.6)));
+      set(sweat, `translate(0 ${8 * seg(t, 2.9, 3.55)})`);
       // hạt: nhẫn lấp lánh, tim vui trên đầu cô dâu, tim nổ khi hôn, sao khi xoay
       once('ring', t, 3.25, () => { const [x, y] = screenOf(q('.ringbox .ring')); burstAt(x, y, 26, pals[0], .5); });
       once('joy1', t, 3.3, () => { const [x, y] = screenOf(B.head); burstAt(x, y - 30, 14, pals[1], .45); });
