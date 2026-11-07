@@ -66,7 +66,7 @@ a{color:inherit}
 .btn-outline:hover{background:var(--wine);color:var(--gold-light)}
 
 /* ---------- FX & music ---------- */
-#fx{position:fixed;inset:0;pointer-events:none;z-index:90}
+#fx{position:fixed;inset:0;pointer-events:none;z-index:150}
 .music-btn{position:fixed;right:18px;bottom:18px;z-index:95;width:56px;height:56px;border-radius:50%;cursor:pointer;
   border:2px solid var(--gold);background:radial-gradient(circle,#a1263f,#3d0a16);color:var(--gold-light);font-size:22px;
   box-shadow:0 6px 22px rgba(0,0,0,.35),0 0 0 4px rgba(212,165,72,.2)}
@@ -261,8 +261,4 @@ a{color:inherit}
   .topnav{justify-content:flex-start}
   .section{padding:90px 16px}
   .invite::before,.footer::after{inset:10px}
-}
-@media (prefers-reduced-motion:reduce){
-  *{animation:none!important;transition:none!important}
-  .reveal{opacity:1;transform:none}
 }

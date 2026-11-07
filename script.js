@@ -134,13 +134,13 @@
     tryPlay();
     const op = $('#opening');
     op.classList.add('open');
-    setTimeout(() => { document.body.classList.remove('locked'); fireworks(); }, 900);
+    fireworks();
+    setTimeout(() => document.body.classList.remove('locked'), 900);
     setTimeout(() => op.classList.add('gone'), 2400);
   });
 
   /* ---- FX: petals, gold sparkles, fireworks ---- */
   const cv = $('#fx'), ctx = cv.getContext('2d');
-  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   let w, h, dpr;
   const resize = () => { dpr = Math.min(devicePixelRatio || 1, 2); w = cv.width = innerWidth * dpr; h = cv.height = innerHeight * dpr; cv.style.width = innerWidth + 'px'; cv.style.height = innerHeight + 'px'; };
   resize(); addEventListener('resize', resize);
@@ -163,15 +163,20 @@
   }
   function explode(x, y, n, palette) {
     for (let i = 0; i < n; i++) {
-      const ang = (i / n) * Math.PI * 2 + R(-.1, .1), sp = R(2, 7) * dpr;
-      parts.push({ x, y, vx: Math.cos(ang) * sp, vy: Math.sin(ang) * sp, life: 1, decay: R(.008, .016), c: palette[i % palette.length], heart: Math.random() < .3, s: R(1.4, 2.6) * dpr });
+      const ang = (i / n) * Math.PI * 2 + R(-.1, .1), sp = R(1.5, 8) * dpr;
+      parts.push({ x, y, vx: Math.cos(ang) * sp, vy: Math.sin(ang) * sp, life: 1, decay: R(.007, .013), c: palette[i % palette.length], heart: Math.random() < .3, s: R(1.4, 2.6) * dpr });
     }
   }
+  const pals = [['#f7e3a8', '#d4a548', '#fff6d8'], ['#e04a66', '#f7c6cf', '#d4a548'], ['#ffffff', '#f2d58a', '#e8b4a0'], ['#ff8fa3', '#ffd6dc', '#f7e3a8']];
+  let rockets = [];
+  function launch(fx, fy, pal) {
+    rockets.push({ x: w * fx, y: h + 10, ty: h * fy, vx: R(-.6, .6) * dpr, vy: -R(11, 14) * dpr, pal, trail: [] });
+  }
+  // Bắn pháo hoa: 3 đợt trong ~6 giây
   function fireworks() {
-    if (reduce) return;
-    const pals = [['#f7e3a8', '#d4a548', '#fff6d8'], ['#e04a66', '#f7c6cf', '#d4a548'], ['#ffffff', '#f2d58a', '#e8b4a0']];
-    const shots = [[.5, .4], [.25, .3], [.75, .3], [.35, .55], [.65, .55], [.5, .25]];
-    shots.forEach(([fx, fy], i) => setTimeout(() => explode(w * fx, h * fy, 60, pals[i % 3]), i * 280));
+    const shots = [[.5, .3], [.2, .25], [.8, .25], [.35, .4], [.65, .4], [.5, .18], [.15, .45], [.85, .45]];
+    for (let wave = 0; wave < 3; wave++)
+      shots.forEach(([fx, fy], i) => setTimeout(() => launch(fx + R(-.05, .05), fy + R(-.05, .05), pals[(i + wave) % pals.length]), wave * 2000 + i * 220));
   }
   window.__fireworks = fireworks;
 
@@ -188,6 +193,14 @@
       star(s.x, s.y, s.r, Math.max(0, Math.sin(s.t)) * .9);
     }
     ctx.globalAlpha = 1;
+    rockets = rockets.filter(r => {
+      r.trail.push([r.x, r.y]); if (r.trail.length > 10) r.trail.shift();
+      r.x += r.vx; r.y += r.vy; r.vy *= .985;
+      r.trail.forEach(([x, y], i) => { ctx.globalAlpha = i / r.trail.length * .8; ctx.fillStyle = '#ffe9b0'; ctx.beginPath(); ctx.arc(x, y, 2.2 * dpr * i / r.trail.length, 0, 6.28); ctx.fill(); });
+      if (r.y <= r.ty || r.vy > -2 * dpr) { explode(r.x, r.y, 80, r.pal); return false; }
+      return true;
+    });
+    ctx.globalAlpha = 1;
     parts = parts.filter(k => k.life > 0);
     for (const k of parts) {
       k.x += k.vx; k.y += k.vy; k.vx *= .985; k.vy = k.vy * .985 + .06 * dpr; k.life -= k.decay;
@@ -197,5 +210,5 @@
     ctx.globalAlpha = 1;
     requestAnimationFrame(loop);
   }
-  if (!reduce) loop();
+  loop();
 })();
