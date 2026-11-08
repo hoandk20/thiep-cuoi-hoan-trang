@@ -522,9 +522,8 @@
   }
   // Bắn pháo hoa: 3 đợt trong ~6 giây
   function fireworks() {
-    const shots = [[.5, .3], [.2, .25], [.8, .25], [.35, .4], [.65, .4], [.5, .18], [.15, .45], [.85, .45]];
-    for (let wave = 0; wave < 3; wave++)
-      shots.forEach(([fx, fy], i) => setTimeout(() => launch(fx + R(-.05, .05), fy + R(-.05, .05), pals[(i + wave) % pals.length]), wave * 2000 + i * 220));
+    const shots = [[.5, .28], [.25, .35], [.75, .35], [.5, .2]];   // 1 đợt, 4 quả nhẹ nhàng
+    shots.forEach(([fx, fy], i) => setTimeout(() => launch(fx + R(-.04, .04), fy + R(-.04, .04), pals[i % pals.length]), i * 350));
   }
   function burstAt(cx, cy, n, pal, speed = 1) { explode(cx * dpr, cy * dpr, n, pal, speed); }
   window.__burst = (x, y) => burstAt(x, y, 36, pals[1], .7);
@@ -546,7 +545,7 @@
       r.trail.push([r.x, r.y]); if (r.trail.length > 10) r.trail.shift();
       r.x += r.vx; r.y += r.vy; r.vy *= .985;
       r.trail.forEach(([x, y], i) => { ctx.globalAlpha = i / r.trail.length * .8; ctx.fillStyle = '#ffe9b0'; ctx.beginPath(); ctx.arc(x, y, 2.2 * dpr * i / r.trail.length, 0, 6.28); ctx.fill(); });
-      if (r.y <= r.ty || r.vy > -2 * dpr) { explode(r.x, r.y, 80, r.pal); return false; }
+      if (r.y <= r.ty || r.vy > -2 * dpr) { explode(r.x, r.y, 45, r.pal); return false; }
       return true;
     });
     ctx.globalAlpha = 1;
