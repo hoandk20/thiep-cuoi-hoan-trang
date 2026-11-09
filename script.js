@@ -107,15 +107,18 @@
     `<figure class="reveal" data-i="${i}"><img loading="lazy" src="${esc(url(src))}" alt="Ảnh cưới ${i + 1}"></figure>`).join('');
   const lb = $('#lightbox'), lbImg = $('img', lb);
   let cur = 0;
-  const show = i => { cur = (i + W.album.length) % W.album.length; lbImg.src = url(W.album[cur]); };
-  $('#masonry').addEventListener('click', e => { const f = e.target.closest('figure'); if (!f) return; show(+f.dataset.i); lb.hidden = false; });
-  $('.lb-close', lb).onclick = () => (lb.hidden = true);
+  const lbCount = $('.lb-count', lb);
+  const show = i => { cur = (i + W.album.length) % W.album.length; lbImg.src = url(W.album[cur]); lbCount.textContent = `${cur + 1} / ${W.album.length}`; };
+  const openLb = i => { show(i); lb.hidden = false; document.body.classList.add('lb-open'); };
+  const closeLb = () => { lb.hidden = true; document.body.classList.remove('lb-open'); };
+  $('#masonry').addEventListener('click', e => { const f = e.target.closest('figure'); if (!f) return; openLb(+f.dataset.i); });
+  $('.lb-close', lb).onclick = closeLb;
   $('.lb-prev', lb).onclick = () => show(cur - 1);
   $('.lb-next', lb).onclick = () => show(cur + 1);
-  lb.addEventListener('click', e => { if (e.target === lb) lb.hidden = true; });
+  lb.addEventListener('click', e => { if (e.target === lb) closeLb(); });
   document.addEventListener('keydown', e => {
     if (lb.hidden) return;
-    if (e.key === 'Escape') lb.hidden = true;
+    if (e.key === 'Escape') closeLb();
     if (e.key === 'ArrowLeft') show(cur - 1);
     if (e.key === 'ArrowRight') show(cur + 1);
   });

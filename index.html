@@ -12,7 +12,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Be+Vietnam+Pro:wght@300;400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=44">
+  <link rel="stylesheet" href="style.css?v=45">
 </head>
 <body class="locked">
 
@@ -262,8 +262,8 @@
     <a href="#invite">Lời mời</a>
     <a href="#couple">Cặp đôi</a>
     <a href="#story">Chuyện tình</a>
-    <a href="#events">Sự kiện</a>
     <a href="#album">Album</a>
+    <a href="#events">Sự kiện</a>
     <a href="#gift">Mừng cưới</a>
   </nav>
 
@@ -473,17 +473,18 @@
       <div class="timeline" id="timeline"></div>
     </section>
 
+    <!-- ====== ALBUM ====== -->
+    <section id="album" class="section album">
+      <h2 class="section-title reveal">Album Hình Cưới</h2>
+      <div class="masonry" id="masonry"></div>
+    </section>
+
     <!-- ====== SỰ KIỆN ====== -->
     <section id="events" class="section events">
       <h2 class="section-title light reveal">Sự Kiện Cưới</h2>
       <div id="eventDays"></div>
     </section>
 
-    <!-- ====== ALBUM ====== -->
-    <section id="album" class="section album">
-      <h2 class="section-title reveal">Album Hình Cưới</h2>
-      <div class="masonry" id="masonry"></div>
-    </section>
 
     <!-- ====== MỪNG CƯỚI ====== -->
     <section id="gift" class="section gift">
@@ -510,11 +511,12 @@
     <button class="lb-prev" aria-label="Ảnh trước">‹</button>
     <img alt="">
     <button class="lb-next" aria-label="Ảnh sau">›</button>
+    <p class="lb-count" aria-live="polite"></p>
   </div>
 
   <div id="toast" class="toast"></div>
 
-  <script src="config.js?v=44"></script>
-  <script src="script.js?v=44"></script>
+  <script src="config.js?v=45"></script>
+  <script src="script.js?v=45"></script>
 </body>
 </html>
