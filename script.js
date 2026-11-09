@@ -288,7 +288,7 @@
     userPaused = false; tryPlay();              // nhạc chạy ngay khi chạm phong bì
     op.classList.add('kiss');
     coupleTimeline();
-    timers.push(setTimeout(finish, 15200));
+    timers.push(setTimeout(finish, 13200));
   }
   env.addEventListener('click', openCard);
   env.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openCard(); } });
@@ -337,7 +337,7 @@
 
     function frame(now) {
       const t = (now - t0) / 1000;
-      const tl = t < 7.6 ? t : (t < 11.6 ? 7.6 : t - 4);   // đoạn kết lùi 4s sau phần cúi chào hai họ
+      const tl = t < 7.6 ? t : (t < 9.6 ? 7.6 : t - 2);   // đoạn kết lùi 2s sau phần cúi chào hai họ
       // --- đi vào: giảm tốc dần, bước chân tính theo quãng đường nên không trượt chân ---
       const pw = seg(t, .9, 2.7), walkD = 170 * outQuad(pw);
       const pa = seg(t, 3.9, 4.4), appD = 40 * inOut(pa);
@@ -346,9 +346,9 @@
       const tw = seg(t, 5.3, 6.2), twE = inOut(tw);           // xoay vòng
       const wave = inOut(seg(tl, 7.6, 7.9)) - inOut(seg(tl, 8.7, 9.0));
       // cúi chào hai họ: quay sang trái chào nhà trai, quay sang phải chào nhà gái
-      const sep = inOut(seg(t, 7.6, 7.9)) - inOut(seg(t, 10.0, 10.4));
-      const gTurn = inOut(seg(t, 7.6, 7.9)) - inOut(seg(t, 8.8, 9.2)), bTurn = inOut(seg(t, 8.8, 9.2)) - inOut(seg(t, 10.0, 10.4));
-      const bowL = Math.pow(bump(seg(t, 7.95, 8.8)), .7), bowR = Math.pow(bump(seg(t, 9.25, 10.1)), .7);   // vẫy tay chào khách
+      const sep = inOut(seg(t, 7.6, 7.75)) - inOut(seg(t, 8.8, 9));
+      const gTurn = inOut(seg(t, 7.6, 7.75)) - inOut(seg(t, 8.2, 8.4)), bTurn = inOut(seg(t, 8.2, 8.4)) - inOut(seg(t, 8.8, 9));
+      const bowL = Math.pow(bump(seg(t, 7.78, 8.2)), .7), bowR = Math.pow(bump(seg(t, 8.43, 8.85)), .7);   // vẫy tay chào khách
       const gx = -240 + walkD + appD - 30 * wave - 28 * sep, bx = 240 - walkD - appD + 20 * bump(tw) + 30 * wave + 28 * sep;
       const vis = clamp((t - .9) / .35);
       op_(G.root, vis); op_(B.root, vis);
@@ -461,10 +461,10 @@
       // khán giả (họ hàng hai bên) phía dưới: xuất hiện sau nụ hôn, giơ tay vỗ khi được cúi chào, cùng nhảy tung pháo giấy
       const enter = outCubic(seg(t, 4.6, 5.4));
       op_(crowd, enter); set(crowd, `translate(0 ${70 * (1 - enter)})`);
-      const party = inOut(seg(t, 10.3, 10.6)) - inOut(seg(t, 11.5, 11.9));
+      const party = inOut(seg(t, 8.95, 9.1)) - inOut(seg(t, 9.55, 9.75));
       const kissCheer = bump(seg(t, 4.9, 6.3));
-      const hype = [Math.max(.25, kissCheer, bump(seg(t, 7.9, 9.0)), .55 * bump(seg(t, 9.2, 10.3)), party),
-                    Math.max(.25, kissCheer, .55 * bump(seg(t, 7.9, 9.0)), bump(seg(t, 9.2, 10.3)), party)];
+      const hype = [Math.max(.25, kissCheer, bump(seg(t, 7.75, 8.3)), .55 * bump(seg(t, 8.4, 8.95)), party),
+                    Math.max(.25, kissCheer, .55 * bump(seg(t, 7.75, 8.3)), bump(seg(t, 8.4, 8.95)), party)];
       people.forEach(P => {
         const I = t > 4.6 ? hype[P.side] : 0;
         const raise = clamp((I - .3) / .4);                                   // giơ tay lên quá đầu
@@ -476,13 +476,13 @@
       });
       const crowdAt = (fx) => { const r = crowd.getBoundingClientRect(); return [r.left + r.width * fx, r.top + r.height * .25]; };
       once('cheerK', t, 5.2, () => { const [x, y] = crowdAt(.5); burstAt(x, y, 30, pals[1], .6); });
-      once('cheerL', t, 8.35, () => { const [x, y] = crowdAt(.25); burstAt(x, y, 30, pals[1], .6); });
-      once('cheerR', t, 9.65, () => { const [x, y] = crowdAt(.75); burstAt(x, y, 30, pals[3], .6); });
-      [10.45, 10.8, 11.15].forEach((at, k) => {
+      once('cheerL', t, 7.97, () => { const [x, y] = crowdAt(.25); burstAt(x, y, 30, pals[1], .6); });
+      once('cheerR', t, 8.62, () => { const [x, y] = crowdAt(.75); burstAt(x, y, 30, pals[3], .6); });
+      [9.02, 9.2, 9.38].forEach((at, k) => {
         once('confL' + k, t, at, () => { const [x, y] = crowdAt(.2 + .1 * k); burstAt(x, y, 40, pals[(k + 2) % 4], .8); });
         once('confR' + k, t, at + .15, () => { const [x, y] = crowdAt(.8 - .1 * k); burstAt(x, y, 40, pals[(k + 1) % 4], .8); });
       });
-      if (t < 17.5) requestAnimationFrame(frame);
+      if (t < 15.5) requestAnimationFrame(frame);
     }
     requestAnimationFrame(frame);
   }
