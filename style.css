@@ -392,5 +392,22 @@ body.lb-open{overflow:hidden}
 .env-guest + .env-small{margin-top:12px}
 .eg-label{font-size:.7rem;letter-spacing:.3em;text-transform:uppercase;color:rgba(247,227,168,.8)}
 .eg-name{font-family:var(--script);font-size:clamp(2rem,8vw,2.6rem);line-height:1.2;color:#fff6d8;overflow-wrap:anywhere}
-.envelope:has(.env-guest:not([hidden])){padding-top:182px}
-.envelope .env-guest{margin-top:0}
+
+/* ---------- Phong bì gọn, chữ không bị nắp/con dấu che, vừa màn hình nhỏ ---------- */
+.envelope{--flap:clamp(84px,15vh,128px);padding:calc(var(--flap) + 48px) 24px 26px}
+.envelope .env-flap{height:var(--flap)}
+.envelope .env-seal{top:var(--flap);width:62px;height:62px;font-size:28px}
+.envelope .env-small{margin-top:0}
+.envelope .env-guest{margin:0 auto 12px}
+.envelope .env-names{font-size:clamp(2.1rem,min(10vw,6.4vh),3.4rem)}
+.envelope .flourish{height:34px;margin:8px auto}
+.envelope .env-date{margin-bottom:20px}
+.envelope .eg-name{font-size:clamp(1.7rem,min(8vw,5vh),2.4rem)}
+#opening{overflow-y:auto;place-items:safe center}
+#opening .gate-card{margin:12px 0}
+@media (max-height:640px){
+  .envelope{padding-bottom:18px}
+  .envelope .flourish{display:none}
+  .envelope .env-date{margin:6px 0 14px}
+  .envelope .btn-gold{padding:11px 30px}
+}
