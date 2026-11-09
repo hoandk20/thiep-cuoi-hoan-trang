@@ -19,13 +19,20 @@
   lazyBg.forEach(([s, src]) => { const el = $(s); el.dataset.bg = src; bgIo.observe(el); });
 
   /* ---- Two wedding days ---- */
-  $('#days').innerHTML = W.days.map(d => `
-    <div class="day-card reveal">
-      <p class="wd">${esc(d.weekday)}</p>
-      <p class="dn">${esc(d.day)}</p>
-      <p class="mo">${esc(d.month)}</p>
-      <p class="lu">${esc(d.lunar)}</p>
-    </div>`).join('');
+  $('#days').innerHTML = `
+    <div class="day-card day-combined reveal">
+      <div class="dc-row">
+        ${W.days.map((d, i) => `${i ? '<span class="dc-amp">&amp;</span>' : ''}
+        <div class="dc-col">
+          <p class="wd">${esc(d.weekday)}</p>
+          <p class="dn">${esc(d.day)}</p>
+          <p class="lu-s">${esc(d.lunar.replace(/^Ngày /, '').replace(/ năm .*/, ''))} ÂL</p>
+        </div>`).join('')}
+      </div>
+      <p class="mo">${esc(W.days[0].month)}</p>
+      <p class="lu">Năm ${esc((W.days[0].lunar.match(/năm (.*)$/) || [, ''])[1])}</p>
+    </div>
+`;
 
   /* ---- Story ---- */
   $('#timeline').innerHTML = W.story.map(s => `
