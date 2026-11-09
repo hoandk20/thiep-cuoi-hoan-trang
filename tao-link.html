@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Tạo link thiệp mời</title>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Be+Vietnam+Pro:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root{--wine:#7a1c30;--wine-dark:#3d0a16;--gold:#d4a548;--gold-light:#f7e3a8;--cream:#fdf8f1;--ink:#3a2a2a;--muted:#8a7470}
+    *{box-sizing:border-box;margin:0}
+    body{font-family:'Be Vietnam Pro',system-ui,sans-serif;background:var(--cream);color:var(--ink);padding:24px 16px 60px;line-height:1.5}
+    .wrap{max-width:560px;margin:0 auto}
+    h1{font-family:'Great Vibes',cursive;font-weight:400;color:var(--wine);font-size:2.6rem;text-align:center;line-height:1.2}
+    .sub{text-align:center;color:var(--muted);margin:4px 0 22px;font-size:.92rem}
+    .card{background:#fff;border:1px solid #ecd9b0;border-radius:16px;padding:18px;box-shadow:0 8px 24px rgba(122,28,48,.08)}
+    label{font-weight:600;font-size:.9rem;display:block;margin-bottom:6px}
+    textarea{width:100%;min-height:120px;font:inherit;padding:12px 14px;border:1px solid #e3cfa8;border-radius:12px;background:var(--cream);resize:vertical}
+    textarea:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(212,165,72,.25)}
+    .hint{font-size:.8rem;color:var(--muted);margin-top:6px}
+    .btn{font:600 .95rem 'Be Vietnam Pro';border:0;border-radius:30px;padding:11px 22px;cursor:pointer;background:linear-gradient(110deg,#b8862f,#f7e3a8 40%,#d4a548 60%,#c9963b);color:var(--wine-dark)}
+    .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+    .ghost{background:none;border:1px solid var(--gold);color:var(--wine)}
+    ul{list-style:none;padding:0;margin-top:18px;display:grid;gap:10px}
+    li{background:#fff;border:1px solid #ecd9b0;border-radius:14px;padding:12px 14px}
+    .name{font-weight:600;color:var(--wine)}
+    .link{font-size:.78rem;color:var(--muted);word-break:break-all;margin:4px 0 10px}
+    li .row{margin-top:0}
+    li .btn{padding:8px 16px;font-size:.85rem}
+    .toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,120px);background:var(--wine);color:#fff;padding:10px 20px;border-radius:24px;transition:transform .3s;font-size:.9rem}
+    .toast.show{transform:translate(-50%,0)}
+    .empty{text-align:center;color:var(--muted);font-size:.9rem;margin-top:18px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Tạo link thiệp mời</h1>
+    <p class="sub">Nhập tên khách — mỗi người một link, mở ra phong bì sẽ ghi tên họ.</p>
+
+    <div class="card">
+      <label for="names">Tên khách mời (mỗi dòng một người)</label>
+      <textarea id="names" placeholder="Bác Hùng &amp; gia đình&#10;Chị Lan&#10;Anh Minh"></textarea>
+      <p class="hint">Ghi đúng cách xưng hô muốn hiện trên thiệp, ví dụ "Cô Hoa &amp; gia đình".</p>
+      <div class="row">
+        <button class="btn" id="make">Tạo link</button>
+        <button class="btn ghost" id="copyAll" hidden>Sao chép tất cả</button>
+      </div>
+    </div>
+
+    <ul id="list"></ul>
+    <p class="empty" id="empty">Chưa có link nào.</p>
+  </div>
+  <div class="toast" id="toast"></div>
+
+  <script>
+    (function () {
+      const base = location.href.replace(/[?#].*$/, '').replace(/tao-link\.html$/, '');
+      const $ = s => document.querySelector(s);
+      const KEY = 'thiep-khach-moi';
+      const esc = s => s.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+      const linkFor = n => base + '?to=' + encodeURIComponent(n);
+      const toast = m => { const t = $('#toast'); t.textContent = m; t.classList.add('show'); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove('show'), 1800); };
+      const copy = txt => (navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject()).then(
+        () => toast('Đã sao chép'),
+        () => { const ta = document.createElement('textarea'); ta.value = txt; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); toast('Đã sao chép'); });
+
+      function render(names) {
+        $('#list').innerHTML = names.map((n, i) => `
+          <li>
+            <div class="name">${esc(n)}</div>
+            <div class="link">${esc(linkFor(n))}</div>
+            <div class="row">
+              <button class="btn" data-copy="${i}">Sao chép link</button>
+              ${navigator.share ? `<button class="btn ghost" data-share="${i}">Gửi…</button>` : ''}
+            </div>
+          </li>`).join('');
+        $('#empty').hidden = names.length > 0;
+        $('#copyAll').hidden = names.length < 2;
+        render.names = names;
+      }
+      function make() {
+        const names = [...new Set($('#names').value.split('\n').map(s => s.trim()).filter(Boolean))].map(s => s.slice(0, 60));
+        try { localStorage.setItem(KEY, $('#names').value); } catch (e) {}
+        render(names);
+      }
+      $('#make').onclick = make;
+      $('#copyAll').onclick = () => copy(render.names.map(n => `${n}: ${linkFor(n)}`).join('\n'));
+      $('#list').addEventListener('click', e => {
+        const c = e.target.closest('[data-copy]'), s = e.target.closest('[data-share]');
+        if (c) copy(linkFor(render.names[+c.dataset.copy]));
+        if (s) { const n = render.names[+s.dataset.share]; navigator.share({ title: 'Thiệp cưới Đình Hoàn & Thu Trang', text: `Thân gửi ${n}, trân trọng kính mời đến dự lễ cưới của chúng mình 💌`, url: linkFor(n) }).catch(() => {}); }
+      });
+      try { const saved = localStorage.getItem(KEY); if (saved) { $('#names').value = saved; make(); } } catch (e) {}
+      if (!render.names) render([]);
+    })();
+  </script>
+</body>
+</html>

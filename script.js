@@ -18,6 +18,14 @@
   }), { rootMargin: '600px 0px' });
   lazyBg.forEach(([s, src]) => { const el = $(s); el.dataset.bg = src; bgIo.observe(el); });
 
+  /* ---- Tên khách mời từ link: ...?to=Tên khách ---- */
+  const guest = (new URLSearchParams(location.search).get('to') || '').trim().slice(0, 60);
+  if (guest) {
+    $('#guestName').textContent = guest;
+    $('#envGuest').hidden = false;
+    document.title = `Thiệp mời gửi ${guest} · ${W.groom.shortName} & ${W.bride.shortName}`;
+  }
+
   /* ---- Two wedding days ---- */
   $('#days').innerHTML = `
     <div class="day-card day-combined reveal">
