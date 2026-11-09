@@ -60,9 +60,9 @@ window.WEDDING = {
 
   // Chuyện tình yêu (sửa nội dung, thêm/bớt tuỳ ý)
   story: [
-    { date: "Những chuyến đi", title: "Cùng nhau khám phá", text: "Từ sân ga Hải Phòng, chúng mình bắt đầu những hành trình đầu tiên bên nhau.", photo: "images/album-02.jpg" },
-    { date: "Hẹn hò", title: "Những điều nhỏ bé", text: "Cùng nhau vẽ chiếc cốc gốm, cùng nhau tạo nên những kỷ niệm thật giản dị mà ngọt ngào.", photo: "images/album-03.jpg" },
-    { date: "Lời cầu hôn", title: "Em đồng ý", text: "Bên bờ biển lộng gió, một chiếc nhẫn, một cái gật đầu — và hành trình mới chính thức bắt đầu.", photo: "images/album-05.jpg" },
+    { date: "Lần đầu gặp gỡ", title: "Duyên phận bắt đầu", text: "Giữa bao nhiêu người, chúng mình đã tìm thấy nhau — một khởi đầu thật giản dị mà đáng nhớ.", photo: "images/album-02.jpg" },
+    { date: "Thương nhau", title: "Những ngày bên nhau", text: "Cùng nhau đi qua bao kỷ niệm, những niềm vui nhỏ bé mỗi ngày khiến tình yêu thêm lớn dần.", photo: "images/album-03.jpg" },
+    { date: "Lời hứa", title: "Em đồng ý", text: "Một lời hỏi, một cái gật đầu — và chúng mình quyết định cùng nhau viết tiếp câu chuyện.", photo: "images/album-05.jpg" },
     { date: "27 & 28 . 12 . 2026", title: "Về chung một nhà", text: "Ngày chúng mình chính thức nắm tay nhau trước hai họ, hứa hẹn yêu thương trọn đời.", photo: "images/album-01.jpg" }
   ],
 

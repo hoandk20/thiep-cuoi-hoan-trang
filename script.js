@@ -479,7 +479,7 @@
   const petalColors = ['#f7c6cf', '#f2a7b5', '#fde2e4', '#e8b4a0', '#ffd6dc'];
   const mkPetal = (y) => ({ x: R(0, w), y: y ?? -20, r: R(6, 13) * dpr, vy: R(.5, 1.4) * dpr, vx: R(-.4, .4) * dpr, a: R(0, 6.28), va: R(-.03, .03), c: petalColors[Math.random() * 5 | 0], sw: R(0, 6.28) });
   const mkSpark = () => ({ x: R(0, w), y: R(0, h), r: R(.6, 1.8) * dpr, t: R(0, 6.28), vt: R(.02, .06), vy: R(-.25, -.05) * dpr });
-  const petals = Array.from({ length: innerWidth < 700 ? 16 : 28 }, () => mkPetal(R(0, h)));
+  const petals = Array.from({ length: innerWidth < 700 ? 8 : 14 }, () => mkPetal(R(0, h)));
   const sparks = Array.from({ length: innerWidth < 700 ? 30 : 60 }, mkSpark);
   let parts = [];
 
