@@ -26,3 +26,7 @@ Bỏ file nhạc vào thư mục `music/` và đặt tên **`nhac-nen.mp3`** (kh
 python3 -m http.server 8000
 ```
 Mở http://localhost:8000
+
+## Ảnh hiện khi chia sẻ link (Messenger, Zalo, Facebook)
+Ảnh xem trước là `images/share.jpg` (1200×630). Khi có ảnh cưới, thay file này bằng ảnh **ngang 1200×630**, giữ nguyên tên.
+Facebook lưu tạm ảnh cũ: sau khi thay, vào https://developers.facebook.com/tools/debug/ dán link thiệp và bấm **Scrape Again** để cập nhật.
